@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables (NEVER commit these)
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env.local
+
+# SQLite database files
+*.db
+*.db-journal
+
+# Prisma migrations lock (keep migrations folder but not lock)
+backend/prisma/migrations/dev.db
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Render
+.render-buildpacks.json

@@ -1,0 +1,40 @@
+services:
+  # ── Backend (Express + Socket.io) ──────────────────────────────────
+  - type: web
+    name: ingeniosnack-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npx prisma migrate deploy
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false   # Set this manually in Render dashboard
+      - key: DIRECT_URL
+        sync: false   # Set this manually in Render dashboard
+      - key: JWT_SECRET
+        sync: false   # Set this manually in Render dashboard
+      - key: FRONTEND_URL
+        sync: false   # Set to your Render static site URL
+      - key: PORT
+        value: 3001
+    autoDeploy: true
+
+  # ── Frontend (React/Vite static site) ──────────────────────────────
+  - type: web
+    name: ingeniosnack
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false   # Set to your backend URL: https://ingeniosnack-api.onrender.com/api
+      - key: VITE_SOCKET_URL
+        sync: false   # Set to your backend URL: https://ingeniosnack-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    autoDeploy: true
