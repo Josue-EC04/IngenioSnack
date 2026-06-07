@@ -18,20 +18,18 @@ export default function StudentLayout() {
   return (
     <div className="max-w-5xl mx-auto relative min-h-screen md:shadow-2xl md:border-x border-white/50" style={{ background: 'transparent' }}>
       {/* App Header */}
-      <header className="app-header px-4 py-4 md:px-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #3e1f00, #7a3f00)' }}>
-              <Coffee size={16} color="white" />
-            </div>
-            <span className="font-bold text-base" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>
-              IngenioSnack
-            </span>
+      <header className="glass sticky top-0 z-50 flex items-center justify-between px-4 py-3 mb-4 shadow-sm border-b border-white/40">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#ff6b35] to-[#ff8c35] flex items-center justify-center shadow-md shadow-orange-500/20">
+            <span className="text-white font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>I</span>
           </div>
-          <div className="text-xs text-gray-500">
-            {user?.nombre?.split(' ')[0]}
+          <div>
+            <h1 className="text-lg font-bold leading-tight" style={{ color: '#3e1f00', fontFamily: 'var(--font-display)' }}>IngenioSnack</h1>
+            <p className="text-xs font-medium text-orange-500">Cafetería UNCP</p>
           </div>
+        </div>
+        <div className="text-xs text-gray-500">
+          {user?.nombre?.split(' ')[0]}
         </div>
       </header>
 

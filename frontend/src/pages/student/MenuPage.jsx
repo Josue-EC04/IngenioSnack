@@ -40,26 +40,29 @@ function ProductCard({ producto }) {
   return (
     <div className={`product-card animate-fade-in-up ${agotado ? 'opacity-60' : ''}`}>
       {/* Imagen / Emoji */}
-      <div className="relative" style={{ background: 'linear-gradient(135deg, rgba(255,243,230,0.5) 0%, rgba(255,232,214,0.5) 100%)', height: '140px' }}>
+      <div className="relative overflow-hidden transition-all duration-300 group-hover:scale-[1.02]" style={{ background: 'linear-gradient(135deg, rgba(255,243,230,0.5) 0%, rgba(255,232,214,0.5) 100%)', minHeight: '160px' }}>
         <div className="absolute inset-0 flex items-center justify-center text-5xl text-orange-200">
           {producto.imagen_url ? (
-            <img src={producto.imagen_url} alt={producto.nombre} className="w-full h-full object-cover" />
+            <img src={producto.imagen_url} alt={producto.nombre} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
           ) : (
             (() => {
               const Icon = getFallbackIcon(producto.categoria);
-              return <Icon size={48} strokeWidth={1.5} />;
+              return <Icon size={56} strokeWidth={1.5} className="transition-transform duration-300 group-hover:scale-110" />;
             })()
           )}
         </div>
+        {/* Overlay gradient inside image container */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
         {agotado && (
           <div className="absolute inset-0 flex items-center justify-center"
-            style={{ background: 'rgba(0,0,0,0.45)' }}>
-            <span className="text-white text-xs font-bold px-3 py-1 rounded-full bg-gray-700">Agotado</span>
+            style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(2px)' }}>
+            <span className="text-white text-xs font-bold px-3 py-1 rounded-full bg-gray-800/90 shadow-lg">Agotado</span>
           </div>
         )}
         {!agotado && producto.stock <= 5 && (
           <div className="absolute top-2 right-2">
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full text-orange-700 bg-orange-100">
+            <span className="text-xs font-bold px-2 py-1 rounded-full shadow-sm text-orange-700 bg-orange-100/90 backdrop-blur-md">
               ¡Solo {producto.stock}!
             </span>
           </div>
