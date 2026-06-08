@@ -37,7 +37,7 @@ export default function CartPage() {
   };
 
   const handleConfirmar = async () => {
-    if (items.length === 0) {
+    if (items.length === 0 && !cuponAplicado) {
       toast.error('Tu carrito está vacío');
       return;
     }
@@ -69,24 +69,7 @@ export default function CartPage() {
     }
   };
 
-  if (items.length === 0) {
-    return (
-      <div className="page-content flex flex-col items-center justify-center min-h-screen px-4 pb-24">
-        <div className="flex justify-center mb-4 text-gray-300">
-          <ShoppingCart size={64} strokeWidth={1.5} />
-        </div>
-        <h2 className="text-xl font-bold text-gray-700 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-          Tu carrito está vacío
-        </h2>
-        <p className="text-gray-500 mb-6 text-center text-sm">
-          Agrega productos del menú para realizar tu pedido
-        </p>
-        <button id="cart-ir-menu" onClick={() => navigate('/menu')} className="btn-primary">
-          Ver Menú
-        </button>
-      </div>
-    );
-  }
+
 
   return (
     <div className="page-content px-4 pt-4 pb-32">
@@ -99,6 +82,15 @@ export default function CartPage() {
 
       {/* Lista de items */}
       <div className="space-y-3 mb-6">
+        {items.length === 0 && !cuponAplicado && (
+          <div className="bg-white rounded-2xl p-6 shadow-sm text-center flex flex-col items-center">
+            <ShoppingCart size={40} className="text-gray-300 mb-3" />
+            <p className="text-gray-500 text-sm mb-4">No has agregado productos al carrito</p>
+            <button id="cart-ir-menu" onClick={() => navigate('/menu')} className="btn-primary text-sm px-6 py-2">
+              Ver Menú
+            </button>
+          </div>
+        )}
         {items.map((item, i) => (
           <div
             key={item.producto_id}
