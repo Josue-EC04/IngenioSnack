@@ -122,9 +122,9 @@ export default function AdminDashboardPage() {
               <p className="text-gray-400 text-sm font-medium">Aún no hay pedidos hoy</p>
             )}
             {(dashboard?.pedidos_hoy || 0) > 0 && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ marginTop: '-20px' }}>
-                <span className="text-3xl font-black text-gray-800">{dashboard?.pedidos_hoy}</span>
-                <span className="text-xs text-gray-400 font-medium">Total</span>
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
+                <span className="text-4xl font-black text-gray-800 leading-none">{dashboard?.pedidos_hoy}</span>
+                <span className="text-xs text-gray-400 font-medium mt-1">Pedidos</span>
               </div>
             )}
           </div>
