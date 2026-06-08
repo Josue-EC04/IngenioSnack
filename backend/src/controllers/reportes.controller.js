@@ -79,22 +79,32 @@ const getReporteVentas = async (req, res) => {
 
     const top5Productos = productosOrdenados.slice(0, 5);
 
-    // Día de mayor venta
+    // Ventas agrupadas por día
     const ventasPorDia = {};
     for (const pedido of pedidosEntregados) {
       const dia = pedido.created_at.toISOString().split('T')[0];
-      if (!ventasPorDia[dia]) ventasPorDia[dia] = 0;
-      ventasPorDia[dia] += pedido.total;
+      if (!ventasPorDia[dia]) {
+        ventasPorDia[dia] = { fecha: dia, ingresos: 0, cantidad_pedidos: 0 };
+      }
+      ventasPorDia[dia].ingresos += pedido.total;
+      ventasPorDia[dia].cantidad_pedidos += 1;
     }
 
+    // Ordenar los días cronológicamente
+    const historialDiario = Object.values(ventasPorDia).sort((a, b) => a.fecha.localeCompare(b.fecha));
+
     const diaMayorVenta = Object.entries(ventasPorDia)
-      .sort(([, a], [, b]) => b - a)[0];
+      .sort(([, a], [, b]) => b.ingresos - a.ingresos)[0];
+
+    const ticketPromedio = pedidosEntregados.length > 0 ? totalIngresos / pedidosEntregados.length : 0;
 
     res.json({
       periodo: { desde: fechaDesde, hasta: fechaHasta },
       total_pedidos: pedidosEntregados.length,
       total_ingresos: totalIngresos,
-      dia_mayor_venta: diaMayorVenta ? { fecha: diaMayorVenta[0], total: diaMayorVenta[1] } : null,
+      ticket_promedio: ticketPromedio,
+      dia_mayor_venta: diaMayorVenta ? { fecha: diaMayorVenta[0], total: diaMayorVenta[1].ingresos } : null,
+      ventas_por_dia: historialDiario,
       top5_productos: top5Productos,
       todos_los_productos: productosOrdenados,
     });

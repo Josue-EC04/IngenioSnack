@@ -4,11 +4,12 @@ import toast from 'react-hot-toast';
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
+  PointElement, LineElement, Filler
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { DollarSign, TrendingUp, Calendar, Download, BarChart3, Trophy } from 'lucide-react';
+import { Bar, Line } from 'react-chartjs-2';
+import { DollarSign, TrendingUp, Calendar, Download, BarChart3, Trophy, Receipt } from 'lucide-react';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Filler, Title, Tooltip, Legend);
 
 const PERIODOS = [
   { key: 'hoy', label: 'Hoy' },
@@ -74,6 +75,56 @@ export default function AdminReportesPage() {
         beginAtZero: true,
         ticks: { stepSize: 1 },
         grid: { color: 'rgba(0,0,0,0.05)' },
+      },
+      x: {
+        grid: { display: false },
+      },
+    },
+  };
+
+  const formatDia = (fechaStr) => {
+    const fecha = new Date(fechaStr + 'T00:00:00'); // Evitar timezone offset issue
+    if (periodo === 'semana' || periodo === 'hoy') {
+      return fecha.toLocaleDateString('es-PE', { weekday: 'long' }).replace(/^\w/, (c) => c.toUpperCase());
+    }
+    return fecha.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
+  };
+
+  const lineChartData = {
+    labels: reporte?.ventas_por_dia?.map((v) => formatDia(v.fecha)) || [],
+    datasets: [
+      {
+        label: 'Ingresos Diarios (S/)',
+        data: reporte?.ventas_por_dia?.map((v) => v.ingresos) || [],
+        borderColor: '#ff6b35',
+        backgroundColor: 'rgba(255, 107, 53, 0.1)',
+        borderWidth: 3,
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#ff6b35',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        fill: true,
+        tension: 0.3,
+      },
+    ],
+  };
+
+  const lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ` S/ ${ctx.parsed.y.toFixed(2)}`,
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { callback: (value) => `S/ ${value}` }
       },
       x: {
         grid: { display: false },
@@ -148,26 +199,38 @@ export default function AdminReportesPage() {
             </div>
             <div className="stat-card">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp size={18} style={{ color: '#ff6b35' }} />
-                <p className="text-sm text-gray-500">Pedidos</p>
+                <Receipt size={18} style={{ color: '#3b82f6' }} />
+                <p className="text-sm text-gray-500">Ticket Promedio</p>
               </div>
               <p className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>
-                {reporte.total_pedidos}
+                S/ {reporte.ticket_promedio?.toFixed(2) || '0.00'}
               </p>
             </div>
             {reporte.dia_mayor_venta && (
-              <div className="stat-card col-span-2 md:col-span-1">
+              <div className="stat-card">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar size={18} style={{ color: '#ffd700' }} />
                   <p className="text-sm text-gray-500">Mejor día</p>
                 </div>
                 <p className="font-bold" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>
-                  {new Date(reporte.dia_mayor_venta.fecha).toLocaleDateString('es-PE', { timeZone: 'UTC' })}
+                  {formatDia(reporte.dia_mayor_venta.fecha)}
                 </p>
                 <p className="text-sm text-gray-500">S/ {reporte.dia_mayor_venta.total.toFixed(2)}</p>
               </div>
             )}
           </div>
+
+          {/* Gráfico de Evolución Diaria */}
+          {reporte.ventas_por_dia?.length > 0 && (
+            <div className="glass rounded-2xl p-5 shadow-sm mb-4 h-80">
+              <h3 className="font-bold text-gray-700 mb-4 flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
+                <TrendingUp size={18} className="text-orange-500" /> Evolución de Ingresos
+              </h3>
+              <div className="h-60">
+                <Line data={lineChartData} options={lineChartOptions} />
+              </div>
+            </div>
+          )}
 
           {/* Gráfico top 5 */}
           {reporte.top5_productos?.length > 0 ? (
