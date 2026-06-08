@@ -135,9 +135,7 @@ export default function AdminPedidosPage() {
 
   const fetchPedidos = useCallback(async () => {
     try {
-      const params = {};
-      if (filtro !== 'todos') params.estado = filtro;
-      const res = await api.get('/pedidos', { params });
+      const res = await api.get('/pedidos');
       setPedidos(res.data);
     } catch (err) {
       toast.error('Error al cargar pedidos');
