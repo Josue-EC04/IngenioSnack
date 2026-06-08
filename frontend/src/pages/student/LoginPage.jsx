@@ -110,11 +110,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Demo credentials */}
-          <div className="mt-4 p-3 rounded-xl text-xs text-gray-500 bg-amber-50 border border-amber-100">
-            <p className="font-semibold text-amber-800 mb-1 flex items-center gap-1"><GraduationCap size={16} /> Demo Estudiante:</p>
-            <p>ana.garcia@uncp.edu.pe / estudiante123</p>
-          </div>
         </div>
       </div>
 
