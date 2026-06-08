@@ -187,4 +187,25 @@ const validarCupon = async (req, res) => {
   }
 };
 
-module.exports = { getMisFidelidad, getAllCupones, canjearCupon, buscarCupon, validarCupon };
+// GET /api/fidelidad/ranking — Ranking de fidelidad (admin)
+const getRankingFidelidad = async (req, res) => {
+  try {
+    const ranking = await prisma.user.findMany({
+      where: { rol: 'estudiante', puntos_fidelidad: { gt: 0 } },
+      select: {
+        id: true,
+        nombre: true,
+        correo: true,
+        puntos_fidelidad: true,
+      },
+      orderBy: { puntos_fidelidad: 'desc' },
+      take: 20,
+    });
+    res.json(ranking);
+  } catch (error) {
+    console.error('Error al obtener ranking:', error);
+    res.status(500).json({ error: 'Error al obtener ranking' });
+  }
+};
+
+module.exports = { getMisFidelidad, getAllCupones, canjearCupon, buscarCupon, validarCupon, getRankingFidelidad };

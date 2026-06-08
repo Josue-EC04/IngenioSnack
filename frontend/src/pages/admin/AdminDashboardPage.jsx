@@ -1,137 +1,189 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { ShoppingBag, DollarSign, AlertTriangle, TrendingUp, Coffee, Package, Clock, ChefHat, CheckCircle } from 'lucide-react';
+import { ShoppingBag, DollarSign, AlertTriangle, TrendingUp, Package, Clock, ChefHat, CheckCircle, Activity } from 'lucide-react';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler } from 'chart.js';
+import { Doughnut, Line } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler);
 
 function StatCard({ icon: Icon, label, value, sub, color }) {
   return (
-    <div className="stat-card animate-fade-in-up">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${color}20` }}>
-          <Icon size={20} style={{ color }} />
+    <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 animate-fade-in-up transition-all hover:shadow-md">
+      <div className="flex items-center justify-between mb-3">
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: `${color}15` }}>
+          <Icon size={24} style={{ color }} />
         </div>
-        <p className="text-sm text-gray-500">{label}</p>
+        {sub && <span className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-50 text-gray-500">{sub}</span>}
       </div>
-      <p className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>{value}</p>
-      {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+      <p className="text-gray-500 font-medium text-sm mb-1">{label}</p>
+      <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)', color: '#1f2937' }}>{value}</p>
     </div>
   );
 }
 
 export default function AdminDashboardPage() {
   const [dashboard, setDashboard] = useState(null);
+  const [reporte, setReporte] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDashboard = async () => {
+    const fetchData = async () => {
       try {
-        const res = await api.get('/reportes/dashboard');
-        setDashboard(res.data);
+        const [dashRes, repRes] = await Promise.all([
+          api.get('/reportes/dashboard'),
+          api.get('/reportes/ventas?periodo=semana')
+        ]);
+        setDashboard(dashRes.data);
+        setReporte(repRes.data);
       } catch (err) {
         console.error('Error al cargar dashboard:', err);
       } finally {
         setLoading(false);
       }
     };
-    fetchDashboard();
-    const interval = setInterval(fetchDashboard, 30000);
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+      <div className="flex items-center justify-center h-screen">
+        <div className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin"
           style={{ borderColor: '#ff6b35', borderTopColor: 'transparent' }} />
       </div>
     );
   }
 
+  const doughnutData = {
+    labels: ['Recibidos', 'Preparando', 'Listos', 'Entregados'],
+    datasets: [{
+      data: [
+        dashboard?.pedidos_por_estado?.recibido || 0,
+        dashboard?.pedidos_por_estado?.preparando || 0,
+        dashboard?.pedidos_por_estado?.listo || 0,
+        dashboard?.pedidos_por_estado?.entregado || 0,
+      ],
+      backgroundColor: ['#f59e0b', '#3b82f6', '#22c55e', '#9ca3af'],
+      borderWidth: 0,
+      hoverOffset: 4,
+    }],
+  };
+
+  const lineData = {
+    labels: reporte?.ventas_por_dia?.map((v) => new Date(v.fecha + 'T00:00:00').toLocaleDateString('es-PE', { weekday: 'short' })) || [],
+    datasets: [{
+      label: 'Ingresos (S/)',
+      data: reporte?.ventas_por_dia?.map((v) => v.ingresos) || [],
+      borderColor: '#ff6b35',
+      backgroundColor: 'rgba(255, 107, 53, 0.1)',
+      borderWidth: 3,
+      fill: true,
+      tension: 0.4,
+      pointRadius: 0,
+      pointHoverRadius: 6,
+    }],
+  };
+
   return (
-    <div className="p-4 md:p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>
-          Dashboard
+    <div className="p-4 md:p-8 pb-24 bg-gray-50 min-h-screen">
+      <div className="mb-8 animate-fade-in-up">
+        <h1 className="text-3xl font-black tracking-tight" style={{ fontFamily: 'var(--font-display)', color: '#111827' }}>
+          Visión General
         </h1>
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-500 font-medium mt-1 flex items-center gap-2">
+          <Clock size={16} /> 
           {new Date().toLocaleDateString('es-PE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Lima' })}
         </p>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 gap-3 mb-6 md:grid-cols-4">
-        <StatCard
-          icon={ShoppingBag}
-          label="Pedidos hoy"
-          value={dashboard?.pedidos_hoy || 0}
-          color="#ff6b35"
-        />
-        <StatCard
-          icon={AlertTriangle}
-          label="Pendientes"
-          value={dashboard?.pedidos_pendientes || 0}
-          sub="Sin entregar"
-          color="#f59e0b"
-        />
-        <StatCard
-          icon={DollarSign}
-          label="Ingresos hoy"
-          value={`S/ ${(dashboard?.ingresos_entregados || 0).toFixed(2)}`}
-          sub="Pedidos entregados"
-          color="#22c55e"
-        />
-        <StatCard
-          icon={Package}
-          label="Agotados"
-          value={dashboard?.total_productos_agotados || 0}
-          sub="Productos"
-          color="#dc3545"
-        />
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <StatCard icon={ShoppingBag} label="Pedidos Hoy" value={dashboard?.pedidos_hoy || 0} color="#ff6b35" />
+        <StatCard icon={AlertTriangle} label="En Proceso" value={dashboard?.pedidos_pendientes || 0} sub="Pendientes" color="#f59e0b" />
+        <StatCard icon={DollarSign} label="Ingresos Confirmados" value={`S/ ${(dashboard?.ingresos_entregados || 0).toFixed(2)}`} color="#22c55e" />
+        <StatCard icon={Package} label="Agotados" value={dashboard?.total_productos_agotados || 0} sub="Stock cero" color="#dc3545" />
       </div>
 
-      {/* Desglose por estado */}
-      <div className="glass rounded-2xl p-6 mb-6">
-        <h3 className="font-bold text-gray-700 mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-          Pedidos por Estado
-        </h3>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {[
-            { estado: 'recibido',   icon: Clock,       label: 'Recibidos',   color: '#f59e0b', bg: '#fef3c7' },
-            { estado: 'preparando', icon: ChefHat,     label: 'Preparando',  color: '#3b82f6', bg: '#dbeafe' },
-            { estado: 'listo',      icon: CheckCircle, label: 'Listos',       color: '#22c55e', bg: '#dcfce7' },
-            { estado: 'entregado',  icon: Package,     label: 'Entregados',   color: '#6b7280', bg: '#f3f4f6' },
-          ].map((item) => (
-            <div key={item.estado} className="rounded-xl p-4 text-center transition-transform hover:scale-105" style={{ background: item.bg, boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
-              <div className="flex justify-center mb-2" style={{ color: item.color }}><item.icon size={28} strokeWidth={1.5} /></div>
-              <p className="text-2xl font-bold" style={{ color: item.color, fontFamily: 'var(--font-display)' }}>
-                {dashboard?.pedidos_por_estado?.[item.estado] || 0}
-              </p>
-              <p className="text-xs font-medium" style={{ color: item.color }}>{item.label}</p>
-            </div>
-          ))}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        
+        {/* Gráfico de Estados */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 lg:col-span-1 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <h3 className="font-bold text-gray-800 mb-6" style={{ fontFamily: 'var(--font-display)' }}>
+            Estado Operativo
+          </h3>
+          <div className="relative h-48 flex justify-center items-center">
+            {(dashboard?.pedidos_hoy || 0) > 0 ? (
+              <Doughnut 
+                data={doughnutData} 
+                options={{ cutout: '75%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 20, font: { family: 'Inter', size: 12 } } } } }} 
+              />
+            ) : (
+              <p className="text-gray-400 text-sm font-medium">Aún no hay pedidos hoy</p>
+            )}
+            {(dashboard?.pedidos_hoy || 0) > 0 && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ marginTop: '-20px' }}>
+                <span className="text-3xl font-black text-gray-800">{dashboard?.pedidos_hoy}</span>
+                <span className="text-xs text-gray-400 font-medium">Total</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Gráfico de Tendencia */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 lg:col-span-2 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-gray-800" style={{ fontFamily: 'var(--font-display)' }}>
+              Tendencia de la Semana
+            </h3>
+            <span className="flex items-center gap-1 text-sm font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full">
+              <TrendingUp size={14} /> En vivo
+            </span>
+          </div>
+          <div className="h-48">
+            <Line 
+              data={lineData} 
+              options={{ 
+                responsive: true, maintainAspectRatio: false, 
+                plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { label: (ctx) => ` S/ ${ctx.parsed.y.toFixed(2)}` } } }, 
+                scales: { x: { grid: { display: false } }, y: { beginAtZero: true, border: { dash: [4, 4] }, grid: { color: '#f3f4f6' }, ticks: { maxTicksLimit: 5 } } },
+                interaction: { mode: 'nearest', axis: 'x', intersect: false }
+              }} 
+            />
+          </div>
         </div>
       </div>
 
-      {/* Productos con bajo stock */}
-      {dashboard?.productos_bajo_stock?.length > 0 && (
-        <div className="glass rounded-2xl p-6 animate-fade-in-up">
-          <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-            <AlertTriangle size={18} color="#f59e0b" />
-            Productos con Poco Stock
-          </h3>
-          <div className="space-y-2">
+      {/* Alertas de Stock */}
+      <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
+          <Activity size={20} className="text-orange-500" /> Alertas de Inventario
+        </h3>
+        
+        {dashboard?.productos_bajo_stock?.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {dashboard.productos_bajo_stock.map((p) => (
-              <div key={p.id} className="flex items-center justify-between p-3 rounded-xl"
-                style={{ background: p.stock <= 2 ? '#fef2f2' : '#fef3c7' }}>
-                <span className="font-medium text-sm">{p.nombre}</span>
-                <span className="font-bold text-sm px-3 py-1 rounded-full"
-                  style={{ background: p.stock <= 2 ? '#dc3545' : '#f59e0b', color: 'white' }}>
-                  {p.stock} unid.
-                </span>
+              <div key={p.id} className={`flex items-center justify-between p-4 rounded-2xl border ${p.stock <= 2 ? 'bg-red-50 border-red-100' : 'bg-orange-50 border-orange-100'}`}>
+                <div>
+                  <p className="font-bold text-gray-800">{p.nombre}</p>
+                  <p className="text-xs font-medium text-gray-500">{p.categoria}</p>
+                </div>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-lg ${p.stock <= 2 ? 'bg-red-500 text-white shadow-sm shadow-red-200' : 'bg-orange-400 text-white shadow-sm shadow-orange-200'}`}>
+                  {p.stock}
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-3">
+              <CheckCircle size={32} className="text-green-500" />
+            </div>
+            <p className="font-semibold text-gray-800">Inventario Saludable</p>
+            <p className="text-sm text-gray-500">Ningún producto reporta bajo stock.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

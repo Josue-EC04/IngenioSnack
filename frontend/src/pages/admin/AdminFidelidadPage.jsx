@@ -1,165 +1,106 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../../services/api';
-import toast from 'react-hot-toast';
-import { Search, Gift, CheckCircle, Info, Coffee, Star, Ticket, Sandwich } from 'lucide-react';
+import { Trophy, Medal, Star, Coffee, Info, Award } from 'lucide-react';
 
 export default function AdminFidelidadPage() {
-  const [codigo, setCodigo] = useState('');
-  const [cupon, setCupon] = useState(null);
-  const [searching, setSearching] = useState(false);
-  const [canjeando, setCanjeando] = useState(false);
+  const [ranking, setRanking] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleBuscar = async (e) => {
-    e.preventDefault();
-    if (!codigo.trim()) return;
-    setSearching(true);
-    setCupon(null);
-    try {
-      const res = await api.get(`/fidelidad/buscar-cupon/${codigo.trim().toUpperCase()}`);
-      setCupon(res.data);
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Cupón no encontrado');
-    } finally {
-      setSearching(false);
-    }
-  };
+  useEffect(() => {
+    const fetchRanking = async () => {
+      try {
+        const res = await api.get('/fidelidad/ranking');
+        setRanking(res.data);
+      } catch (err) {
+        console.error('Error al obtener ranking:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRanking();
+  }, []);
 
-  const handleCanjear = async () => {
-    if (!cupon) return;
-    setCanjeando(true);
-    try {
-      await api.patch(`/fidelidad/cupones/${cupon.codigo}/canjear`);
-      toast.success(`Cupón ${cupon.codigo} canjeado exitosamente!`);
-      setCupon({ ...cupon, canjeado: true, fecha_canje: new Date().toISOString() });
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Error al canjear cupón');
-    } finally {
-      setCanjeando(false);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+          style={{ borderColor: '#ff6b35', borderTopColor: 'transparent' }} />
+      </div>
+    );
+  }
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>
-          Sistema de Fidelización
+    <div className="p-4 md:p-6 pb-24">
+      <div className="mb-6 animate-fade-in-up">
+        <h1 className="text-2xl font-bold flex items-center gap-2" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>
+          <Award className="text-amber-500" /> Ranking de Fidelidad
         </h1>
-        <p className="text-gray-500 text-sm mt-1">Valida y canjea cupones de café americano gratis</p>
+        <p className="text-gray-500 text-sm mt-1">Los estudiantes más fieles a IngenioSnack</p>
       </div>
 
-      {/* Buscador de cupón */}
-      <div className="glass rounded-2xl p-5 mb-6">
-        <h3 className="font-bold text-gray-700 mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-          Buscar Cupón
-        </h3>
-        <form onSubmit={handleBuscar} className="flex gap-3">
-          <input
-            id="cupon-input"
-            type="text"
-            className="input-field flex-1 font-mono uppercase"
-            placeholder="CAFE-2024-XK7AB..."
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value.toUpperCase())}
-          />
-          <button id="cupon-buscar" type="submit" className="btn-cafe flex-shrink-0" disabled={searching}>
-            {searching ? (
-              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <Search size={18} />
-            )}
-          </button>
-        </form>
+      <div className="glass rounded-3xl p-6 shadow-sm mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        {ranking.length > 0 ? (
+          <div className="space-y-3">
+            {ranking.map((user, index) => {
+              let badgeColor = '';
+              let Icon = Star;
+              
+              if (index === 0) {
+                badgeColor = 'bg-amber-100 text-amber-600 border-amber-300';
+                Icon = Trophy;
+              } else if (index === 1) {
+                badgeColor = 'bg-gray-100 text-gray-500 border-gray-300';
+                Icon = Medal;
+              } else if (index === 2) {
+                badgeColor = 'bg-orange-100 text-orange-700 border-orange-300';
+                Icon = Medal;
+              } else {
+                badgeColor = 'bg-gray-50 text-gray-400 border-transparent';
+              }
+
+              return (
+                <div key={user.id} className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-transform hover:scale-[1.02] ${badgeColor} ${index > 2 ? 'border-transparent bg-white shadow-sm' : ''}`}>
+                  
+                  {/* Posición */}
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 ${index <= 2 ? 'bg-white shadow-sm' : 'bg-gray-100'}`}>
+                    {index <= 2 ? <Icon size={20} /> : index + 1}
+                  </div>
+
+                  {/* Info Usuario */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-gray-800 text-lg truncate" style={{ fontFamily: 'var(--font-display)' }}>
+                      {user.nombre}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">{user.correo}</p>
+                  </div>
+
+                  {/* Puntos */}
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-2xl font-black" style={{ color: '#ff6b35', fontFamily: 'var(--font-display)' }}>
+                      {user.puntos_fidelidad}
+                    </p>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Puntos</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-10">
+            <Coffee size={48} className="text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500 font-medium">Aún no hay clientes con puntos acumulados</p>
+          </div>
+        )}
       </div>
 
-      {/* Resultado del cupón */}
-      {cupon && (
-        <div className={`animate-bounce-in bg-white rounded-2xl p-5 shadow-sm border-2 ${cupon.canjeado ? 'border-gray-200' : 'border-amber-400'}`}>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl"
-              style={{ background: cupon.canjeado ? '#f3f4f6' : '#fff9d0' }}>
-              <Gift size={24} style={{ color: cupon.canjeado ? '#9ca3af' : '#ffd700' }} />
-            </div>
-            <div>
-              <p className="font-bold text-lg" style={{ fontFamily: 'var(--font-display)', color: '#3e1f00' }}>
-                Café Americano Gratis
-              </p>
-              <code className="text-sm font-mono text-gray-600">{cupon.codigo}</code>
-            </div>
-            <span className={`badge ml-auto ${cupon.canjeado ? 'badge-entregado' : 'badge-listo'}`}>
-              {cupon.canjeado ? 'Canjeado' : 'Válido'}
-            </span>
-          </div>
-
-          <div className="p-3 rounded-xl mb-4" style={{ background: '#f9f4ee' }}>
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-500">Estudiante:</span>
-              <span className="font-semibold">{cupon.user?.nombre}</span>
-            </div>
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-500">Correo:</span>
-              <span className="font-semibold text-xs">{cupon.user?.correo}</span>
-            </div>
-            {cupon.user?.codigo_estudiante && (
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">Código:</span>
-                <span className="font-semibold">{cupon.user.codigo_estudiante}</span>
-              </div>
-            )}
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Generado:</span>
-              <span className="font-semibold">
-                {new Date(cupon.fecha_generacion).toLocaleDateString('es-PE', { timeZone: 'America/Lima' })}
-              </span>
-            </div>
-            {cupon.canjeado && cupon.fecha_canje && (
-              <div className="flex justify-between text-sm mt-1">
-                <span className="text-gray-500">Canjeado:</span>
-                <span className="font-semibold text-green-600">
-                  {new Date(cupon.fecha_canje).toLocaleDateString('es-PE', { timeZone: 'America/Lima' })}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {!cupon.canjeado ? (
-            <button
-              id="cupon-canjear"
-              onClick={handleCanjear}
-              disabled={canjeando}
-              className="btn-primary w-full justify-center"
-            >
-              {canjeando ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Canjeando...
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  <CheckCircle size={18} />
-                  Canjear Cupón (Dar café gratis)
-                </span>
-              )}
-            </button>
-          ) : (
-            <div className="text-center p-3 rounded-xl bg-gray-100">
-              <p className="text-gray-500 font-medium text-sm">Este cupón ya fue utilizado</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Explicación del sistema */}
-      <div className="mt-6 bg-amber-50 rounded-2xl p-5 border border-amber-100">
-        <h3 className="font-bold text-amber-800 mb-3 flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-          <Info size={18} /> Cómo funciona el Café de la Lealtad
+      {/* Info Contextual */}
+      <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2 text-sm">
+          <Info size={16} /> Nota sobre el sistema
         </h3>
-        <ul className="space-y-2 text-sm text-amber-700">
-          <li className="flex items-center gap-2"><Sandwich size={16} /> Cada sándwich comprado y entregado → <strong>1 punto</strong></li>
-          <li className="flex items-center gap-2"><Star size={16} /> Al acumular <strong>10 puntos</strong> → 1 Cupón de Café Americano gratis</li>
-          <li className="flex items-center gap-2"><Ticket size={16} /> El estudiante presenta el código en caja</li>
-          <li className="flex items-center gap-2"><CheckCircle size={16} /> El administrador busca el código y presiona "Canjear"</li>
-          <li className="flex items-center gap-2"><Coffee size={16} /> ¡Entrega el café gratis al estudiante!</li>
-        </ul>
+        <p className="text-xs text-blue-700 leading-relaxed">
+          El canje de cupones ahora es <strong>automático</strong>. Los estudiantes ganan 1 punto por cada sándwich entregado y reciben automáticamente un cupón por cada 10 puntos. Pueden canjearlo ellos mismos desde su carrito sin necesidad de validación manual.
+        </p>
       </div>
     </div>
   );
