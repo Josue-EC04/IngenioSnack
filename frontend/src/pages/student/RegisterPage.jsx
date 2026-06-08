@@ -21,6 +21,11 @@ export default function RegisterPage() {
       toast.error('La contraseña debe tener al menos 6 caracteres');
       return;
     }
+    const emailRegex = /^[^\s@]+@uncp\.edu\.pe$/;
+    if (!emailRegex.test(form.correo)) {
+      toast.error('El correo electrónico debe terminar estrictamente en @uncp.edu.pe');
+      return;
+    }
     setLoading(true);
     try {
       const data = await register({
@@ -41,7 +46,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8"
       style={{ background: 'linear-gradient(135deg, #3e1f00 0%, #7a3f00 50%, #ff6b35 100%)' }}>
-      
+
       <div className="animate-fade-in-up mb-6 text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-3"
           style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)' }}>

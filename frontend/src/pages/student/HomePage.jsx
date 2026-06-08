@@ -127,9 +127,13 @@ export default function HomePage() {
               <p className="font-bold" style={{ color: '#3e1f00', fontFamily: 'var(--font-display)' }}>
                 {user?.puntos_fidelidad || 0} puntos
               </p>
-              <p className="text-xs text-gray-500">
-                {10 - ((user?.puntos_fidelidad || 0) % 10)} sándwiches para tu café gratis
-              </p>
+            <p className="text-xs text-gray-500">
+              {(() => {
+                const pts = user?.puntos_fidelidad || 0;
+                const restantes = pts === 0 ? 10 : pts % 10 === 0 ? 0 : 10 - (pts % 10);
+                return `${restantes} sándwich${restantes !== 1 ? 'es' : ''} para tu café gratis`;
+              })()}
+            </p>
             </div>
           </div>
           <div className="progress-bar">
@@ -139,7 +143,12 @@ export default function HomePage() {
             />
           </div>
           <p className="text-xs text-gray-500 mt-2">
-            {(user?.puntos_fidelidad || 0) % 10}/10 sándwiches para tu próximo café gratis
+            {(() => {
+              const pts = user?.puntos_fidelidad || 0;
+              const progreso = pts % 10;
+              const restantes = pts === 0 ? 10 : progreso === 0 ? 0 : 10 - progreso;
+              return `${progreso}/10 sándwiches${restantes === 0 ? ' — ¡Cupón disponible!' : ` · faltan ${restantes}`}`;
+            })()}
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import { connectSocket } from '../../services/socket';
 import toast from 'react-hot-toast';
-import { RefreshCw, ChevronDown, Clock, ChefHat, CheckCircle, Package, Sandwich, Coffee, Cookie, BoxSelect, AlertCircle, Undo2 } from 'lucide-react';
+import { RefreshCw, ChevronDown, Clock, ChefHat, CheckCircle, Package, Sandwich, Coffee, Cookie, BoxSelect, AlertCircle, Undo2, Gift } from 'lucide-react';
 
 const ESTADOS = ['todos', 'recibido', 'preparando', 'listo', 'entregado'];
 const SIGUIENTE_ESTADO = {
@@ -60,15 +60,37 @@ function PedidoCard({ pedido, onCambiarEstado, loading }) {
         </div>
       </div>
 
+      {/* Indicador de cupón canjeado */}
+      {pedido.codigo_cupon && (
+        <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-xl"
+          style={{ background: '#fff9d0', border: '1px solid #fbbf24' }}>
+          <Gift size={14} className="text-amber-500 flex-shrink-0" />
+          <span className="text-xs font-semibold text-amber-800">
+            Cupón Canjeado: <code className="font-mono">{pedido.codigo_cupon}</code>
+          </span>
+        </div>
+      )}
+
       {/* Productos */}
       <div className="glass rounded-2xl p-4 mb-3">
         {pedido.detalles?.map((det) => (
-          <div key={det.id} className="flex justify-between text-sm text-gray-700">
-            <span className="flex items-center gap-1">
-              {det.producto.categoria === 'sandwiches' ? <Sandwich size={14} className="text-orange-500" /> : det.producto.categoria === 'bebidas' ? <Coffee size={14} className="text-blue-500" /> : <Cookie size={14} className="text-green-500" />}{' '}
+          <div key={det.id} className="flex justify-between text-sm">
+            <span className={`flex items-center gap-1 ${det.precio_unitario === 0 ? 'text-amber-700 font-semibold' : 'text-gray-700'}`}>
+              {det.precio_unitario === 0
+                ? <Gift size={14} className="text-amber-500" />
+                : det.producto.categoria === 'sandwiches'
+                  ? <Sandwich size={14} className="text-orange-500" />
+                  : det.producto.categoria === 'bebidas'
+                    ? <Coffee size={14} className="text-blue-500" />
+                    : <Cookie size={14} className="text-green-500" />}{' '}
               {det.producto.nombre} × {det.cantidad}
+              {det.precio_unitario === 0 && (
+                <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full ml-1">Gratis</span>
+              )}
             </span>
-            <span className="text-gray-500">S/ {det.subtotal.toFixed(2)}</span>
+            <span className={det.precio_unitario === 0 ? 'text-green-600 font-semibold' : 'text-gray-500'}>
+              {det.precio_unitario === 0 ? 'S/ 0.00' : `S/ ${det.subtotal.toFixed(2)}`}
+            </span>
           </div>
         ))}
       </div>

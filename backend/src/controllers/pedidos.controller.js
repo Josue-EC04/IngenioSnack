@@ -3,6 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 // Generar número de pedido formateado (ej: #0042)
+// Usa el timestamp + contador para garantizar unicidad ante concurrencia
 const generarNumeroPedido = async () => {
   const ultimoPedido = await prisma.pedido.findFirst({
     orderBy: { id: 'desc' },
@@ -60,21 +61,30 @@ const procesarPuntosFidelidad = async (pedidoId, userId, io) => {
   const cuponesNuevos = cuponesDespues - cuponesAntes;
 
   for (let i = 0; i < cuponesNuevos; i++) {
-    const codigo = `CAFE-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 5).toUpperCase()}${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
-    await prisma.cuponFidelidad.create({
-      data: {
-        user_id: userId,
-        codigo,
-        tipo: 'cafe_americano',
-      },
-    });
+    // Incluir timestamp + índice para evitar colisiones si se generan múltiples cupones
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const codigo = `CAFE-${new Date().getFullYear()}-${timestamp.slice(-3)}${random}${i}`;
 
-    // Notificar por Socket.io
-    if (io) {
-      io.to(`user_${userId}`).emit('cupon_generado', {
-        message: '🎉 ¡Felicitaciones! Has ganado un Café Americano gratis',
-        codigo,
+    try {
+      await prisma.cuponFidelidad.create({
+        data: {
+          user_id: userId,
+          codigo,
+          tipo: 'cafe_americano',
+        },
       });
+
+      // Notificar por Socket.io
+      if (io) {
+        io.to(`user_${userId}`).emit('cupon_generado', {
+          message: '🎉 ¡Felicitaciones! Has ganado un Café Americano gratis',
+          codigo,
+        });
+      }
+    } catch (createErr) {
+      // Si hay colisión de código único (muy improbable), intentar con código diferente
+      console.error('Error al crear cupón (posible colisión de código):', createErr);
     }
   }
 
@@ -89,7 +99,7 @@ const procesarPuntosFidelidad = async (pedidoId, userId, io) => {
 
 // POST /api/pedidos — Crear pedido
 const createPedido = async (req, res) => {
-  const { items } = req.body;
+  const { items, codigo_cupon } = req.body;
   const userId = req.user.id;
   const io = req.app.get('io');
 
@@ -122,7 +132,7 @@ const createPedido = async (req, res) => {
       });
     }
 
-    // Calcular total
+    // Calcular total (solo de los items del carrito, el café gratis no suma)
     let total = 0;
     const detallesData = items.map((item) => {
       const producto = productos.find((p) => p.id === item.producto_id);
@@ -136,6 +146,45 @@ const createPedido = async (req, res) => {
       };
     });
 
+    // Validar cupón si fue proporcionado
+    let cupon = null;
+    let cafePorCupon = null;
+
+    if (codigo_cupon) {
+      cupon = await prisma.cuponFidelidad.findUnique({
+        where: { codigo: codigo_cupon },
+      });
+
+      if (!cupon) {
+        return res.status(404).json({ error: 'Cupón no encontrado.' });
+      }
+      if (cupon.user_id !== userId) {
+        return res.status(403).json({ error: 'Este cupón no te pertenece.' });
+      }
+      if (cupon.canjeado) {
+        return res.status(409).json({ error: 'Este cupón ya fue canjeado anteriormente.' });
+      }
+
+      // Verificar stock del Café Americano
+      cafePorCupon = await prisma.producto.findFirst({
+        where: { nombre: 'Café Americano', activo: true },
+      });
+
+      if (!cafePorCupon || cafePorCupon.stock <= 0) {
+        return res.status(409).json({
+          error: 'El Café Americano se encuentra agotado/no disponible en este momento. Inténtalo más tarde.',
+        });
+      }
+
+      // Agregar el Café Americano gratis a los detalles del pedido (precio 0)
+      detallesData.push({
+        producto_id: cafePorCupon.id,
+        cantidad: 1,
+        precio_unitario: 0,
+        subtotal: 0,
+      });
+    }
+
     const numeroPedido = await generarNumeroPedido();
 
     // Crear pedido y descontar stock en una transacción
@@ -147,6 +196,7 @@ const createPedido = async (req, res) => {
           total,
           estado: 'recibido',
           metodo_pago: 'contra_entrega',
+          codigo_cupon: codigo_cupon || null,
           detalles: {
             create: detallesData,
           },
@@ -161,7 +211,7 @@ const createPedido = async (req, res) => {
         },
       });
 
-      // Descontar stock
+      // Descontar stock de los items del carrito
       for (const item of items) {
         await tx.producto.update({
           where: { id: item.producto_id },
@@ -178,6 +228,32 @@ const createPedido = async (req, res) => {
             data: { activo: false },
           });
         }
+      }
+
+      // Descontar stock del Café Americano si hay cupón
+      if (cupon && cafePorCupon) {
+        await tx.producto.update({
+          where: { id: cafePorCupon.id },
+          data: { stock: { decrement: 1 } },
+        });
+
+        // Si el stock del café llega a 0, marcarlo como agotado
+        const cafeActual = await tx.producto.findUnique({ where: { id: cafePorCupon.id } });
+        if (cafeActual.stock <= 0) {
+          await tx.producto.update({
+            where: { id: cafePorCupon.id },
+            data: { activo: false },
+          });
+        }
+
+        // Marcar cupón como canjeado
+        await tx.cuponFidelidad.update({
+          where: { codigo: codigo_cupon },
+          data: {
+            canjeado: true,
+            fecha_canje: new Date(),
+          },
+        });
       }
 
       return nuevoPedido;

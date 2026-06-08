@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
@@ -18,6 +18,9 @@ export default function ProfilePage() {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('puntos');
+  // Usar ref para evitar que refreshUser cambiante dispare el effect
+  const refreshUserRef = useRef(refreshUser);
+  useEffect(() => { refreshUserRef.current = refreshUser; }, [refreshUser]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +32,7 @@ export default function ProfilePage() {
         ]);
         setFidelidad(fidRes.data);
         setPedidos(pedRes.data);
-        await refreshUser();
+        await refreshUserRef.current();
       } catch (err) {
         toast.error('Error al cargar el perfil');
       } finally {

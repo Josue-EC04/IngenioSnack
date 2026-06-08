@@ -66,6 +66,7 @@ export default function AdminMenuPage() {
     setSaving(true);
     try {
       if (editingId) {
+        await api.put(`/productos/${editingId}`, form);
         toast.success('Producto actualizado');
       } else {
         await api.post('/productos', form);

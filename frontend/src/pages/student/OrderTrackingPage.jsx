@@ -4,7 +4,7 @@ import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { connectSocket } from '../../services/socket';
 import toast from 'react-hot-toast';
-import { ArrowLeft, Package, CheckCircle, Clock, ChefHat, Sandwich, Coffee, Cookie, Frown, PartyPopper, Wallet } from 'lucide-react';
+import { ArrowLeft, Package, CheckCircle, Clock, ChefHat, Sandwich, Coffee, Cookie, Frown, PartyPopper, Wallet, Gift } from 'lucide-react';
 
 const ESTADOS = [
   { key: 'recibido',   icon: Clock,       label: 'Recibido',            desc: 'Tu pedido fue recibido' },
@@ -160,11 +160,26 @@ export default function OrderTrackingPage() {
           {pedido.detalles?.map((det) => (
             <div key={det.id} className="flex justify-between items-center text-sm">
               <div className="flex items-center gap-2">
-                <span>{det.producto.categoria === 'sandwiches' ? <Sandwich size={16} className="text-orange-500"/> : det.producto.categoria === 'bebidas' ? <Coffee size={16} className="text-blue-500"/> : <Cookie size={16} className="text-green-500"/>}</span>
-                <span className="text-gray-700">{det.producto.nombre}</span>
+                <span>
+                  {det.precio_unitario === 0
+                    ? <Gift size={16} className="text-amber-500" />
+                    : det.producto.categoria === 'sandwiches'
+                      ? <Sandwich size={16} className="text-orange-500" />
+                      : det.producto.categoria === 'bebidas'
+                        ? <Coffee size={16} className="text-blue-500" />
+                        : <Cookie size={16} className="text-green-500" />}
+                </span>
+                <span className={det.precio_unitario === 0 ? 'text-amber-700 font-semibold' : 'text-gray-700'}>
+                  {det.producto.nombre}
+                </span>
                 <span className="text-gray-400">× {det.cantidad}</span>
+                {det.precio_unitario === 0 && (
+                  <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">Gratis</span>
+                )}
               </div>
-              <span className="font-semibold" style={{ color: '#3e1f00' }}>S/ {det.subtotal.toFixed(2)}</span>
+              <span className="font-semibold" style={{ color: det.precio_unitario === 0 ? '#22c55e' : '#3e1f00' }}>
+                {det.precio_unitario === 0 ? 'S/ 0.00' : `S/ ${det.subtotal.toFixed(2)}`}
+              </span>
             </div>
           ))}
           <div className="border-t border-gray-100 pt-2 mt-2 flex justify-between font-bold">

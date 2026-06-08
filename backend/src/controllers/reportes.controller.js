@@ -53,10 +53,12 @@ const getReporteVentas = async (req, res) => {
     // Calcular total de ingresos
     const totalIngresos = pedidosEntregados.reduce((sum, p) => sum + p.total, 0);
 
-    // Calcular ventas por producto
+    // Calcular ventas por producto (excluir ítems de cupón gratis)
     const ventasPorProducto = {};
     for (const pedido of pedidosEntregados) {
       for (const detalle of pedido.detalles) {
+        // Omitir el café americano gratis (canjeado por cupón, precio = 0)
+        if (detalle.precio_unitario === 0) continue;
         const key = detalle.producto_id;
         if (!ventasPorProducto[key]) {
           ventasPorProducto[key] = {

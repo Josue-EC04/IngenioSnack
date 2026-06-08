@@ -49,6 +49,7 @@ model Pedido {
   estado         String   @default("recibido") // "recibido" | "preparando" | "listo" | "entregado"
   total          Float
   metodo_pago    String   @default("contra_entrega")
+  codigo_cupon   String?  // Cupón de fidelidad canjeado en este pedido (si aplica)
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 

@@ -12,10 +12,9 @@ const register = async (req, res) => {
   }
 
   // Validar que sea correo institucional UNCP
-  // Permitir también correos normales para facilidad de prueba
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@uncp\.edu\.pe$/;
   if (!emailRegex.test(correo)) {
-    return res.status(400).json({ error: 'Correo electrónico inválido' });
+    return res.status(400).json({ error: 'Solo se permiten correos electrónicos con el dominio institucional @uncp.edu.pe (distingue mayúsculas y minúsculas)' });
   }
 
   if (password.length < 6) {
@@ -82,7 +81,7 @@ const login = async (req, res) => {
 
   try {
     const user = await prisma.user.findUnique({ where: { correo } });
-    
+
     if (!user) {
       return res.status(401).json({ error: 'Credenciales incorrectas' });
     }

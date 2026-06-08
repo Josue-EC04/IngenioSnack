@@ -131,4 +131,60 @@ const buscarCupon = async (req, res) => {
   }
 };
 
-module.exports = { getMisFidelidad, getAllCupones, canjearCupon, buscarCupon };
+// GET /api/fidelidad/validar/:codigo — Validar cupón para canje en carrito (estudiante)
+const validarCupon = async (req, res) => {
+  const { codigo } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const cupon = await prisma.cuponFidelidad.findUnique({
+      where: { codigo },
+      include: {
+        user: { select: { nombre: true, correo: true } },
+      },
+    });
+
+    if (!cupon) {
+      return res.status(404).json({ error: 'Cupón no encontrado. Verifica el código e intenta de nuevo.' });
+    }
+
+    if (cupon.user_id !== userId) {
+      return res.status(403).json({ error: 'Este cupón no te pertenece.' });
+    }
+
+    if (cupon.canjeado) {
+      return res.status(409).json({ error: 'Este cupón ya fue canjeado anteriormente.' });
+    }
+
+    // Verificar stock de Café Americano
+    const cafe = await prisma.producto.findFirst({
+      where: { nombre: 'Café Americano', activo: true },
+    });
+
+    if (!cafe || cafe.stock <= 0) {
+      return res.status(409).json({
+        error: 'El Café Americano se encuentra agotado/no disponible en este momento. Inténtalo más tarde.',
+      });
+    }
+
+    res.json({
+      valido: true,
+      cupon: {
+        id: cupon.id,
+        codigo: cupon.codigo,
+        tipo: cupon.tipo,
+        fecha_generacion: cupon.fecha_generacion,
+      },
+      regalo: {
+        id: cafe.id,
+        nombre: cafe.nombre,
+        precio: 0,
+      },
+    });
+  } catch (error) {
+    console.error('Error al validar cupón:', error);
+    res.status(500).json({ error: 'Error al validar el cupón' });
+  }
+};
+
+module.exports = { getMisFidelidad, getAllCupones, canjearCupon, buscarCupon, validarCupon };
