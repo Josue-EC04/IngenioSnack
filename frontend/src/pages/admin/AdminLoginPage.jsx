@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
                 id="admin-login-email"
                 type="email"
                 className="input-field"
-                placeholder="julio@ingeniosnack.pe"
+                placeholder="administrador@correo.com"
                 value={form.correo}
                 onChange={(e) => setForm({ ...form, correo: e.target.value })}
                 required
