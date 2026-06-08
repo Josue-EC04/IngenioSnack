@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 import { Shield, Eye, EyeOff, Coffee, Crown } from 'lucide-react';
@@ -100,6 +100,13 @@ export default function AdminLoginPage() {
             </button>
           </form>
         </div>
+      </div>
+
+      {/* Link cliente */}
+      <div className="mt-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <Link to="/login" className="text-orange-300 text-sm hover:text-white transition-colors flex items-center justify-center gap-1">
+          <Coffee size={14} /> Volver a Estudiante
+        </Link>
       </div>
     </div>
   );
