@@ -103,8 +103,12 @@ const createPedido = async (req, res) => {
   const userId = req.user.id;
   const io = req.app.get('io');
 
-  if (!items || !Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ error: 'El carrito está vacío' });
+  if (!items || !Array.isArray(items)) {
+    return res.status(400).json({ error: 'Formato de items inválido' });
+  }
+
+  if (items.length === 0 && !codigo_cupon) {
+    return res.status(400).json({ error: 'El carrito está vacío y no se ha aplicado un cupón' });
   }
 
   try {
