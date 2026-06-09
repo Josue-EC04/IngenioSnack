@@ -298,15 +298,14 @@ const getPedidos = async (req, res) => {
 
     // Filtrar por fecha (hoy por defecto para admin)
     if (esAdmin) {
-      const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0);
-      const mañana = new Date(hoy);
-      mañana.setDate(mañana.getDate() + 1);
+      const options = { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' };
+      const peruDateStr = new Intl.DateTimeFormat('en-US', options).format(new Date()); 
+      const [month, day, year] = peruDateStr.split('/');
+      const hoyInicio = new Date(`${year}-${month}-${day}T00:00:00.000-05:00`);
+      const hoyFin = new Date(`${year}-${month}-${day}T23:59:59.999-05:00`);
       
-      if (!fecha) {
-        where.created_at = { gte: hoy, lt: mañana };
-      } else if (fecha === 'hoy') {
-        where.created_at = { gte: hoy, lt: mañana };
+      if (!fecha || fecha === 'hoy') {
+        where.created_at = { gte: hoyInicio, lte: hoyFin };
       }
     }
 
