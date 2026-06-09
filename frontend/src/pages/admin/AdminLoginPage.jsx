@@ -31,7 +31,12 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4"
-      style={{ background: 'linear-gradient(135deg, #1a0d00 0%, #3e1f00 60%, #5c2f00 100%)' }}>
+      style={{ 
+        backgroundImage: 'linear-gradient(rgba(26, 13, 0, 0.85), rgba(0, 0, 0, 0.9)), url(/images/bg-login.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}>
       
       <div className="animate-fade-in-up mb-8 text-center">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4"

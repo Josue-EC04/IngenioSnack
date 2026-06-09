@@ -27,7 +27,12 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8"
-      style={{ background: 'linear-gradient(135deg, #3e1f00 0%, #7a3f00 50%, #ff6b35 100%)' }}>
+      style={{ 
+        backgroundImage: 'linear-gradient(rgba(26, 13, 0, 0.75), rgba(62, 31, 0, 0.85)), url(/images/bg-login.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}>
       
       {/* Logo */}
       <div className="animate-fade-in-up mb-8 text-center">
