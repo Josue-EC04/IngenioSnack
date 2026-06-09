@@ -306,6 +306,11 @@ const getPedidos = async (req, res) => {
       
       if (!fecha || fecha === 'hoy') {
         where.created_at = { gte: hoyInicio, lte: hoyFin };
+      } else if (fecha && fecha !== 'todos') {
+        // Formato esperado YYYY-MM-DD
+        const fechaInicio = new Date(`${fecha}T00:00:00.000-05:00`);
+        const fechaFin = new Date(`${fecha}T23:59:59.999-05:00`);
+        where.created_at = { gte: fechaInicio, lte: fechaFin };
       }
     }
 
