@@ -165,7 +165,8 @@ export default function MenuPage() {
           <input
             id="menu-busqueda"
             type="text"
-            className="input-field pl-10"
+            className="input-field"
+            style={{ paddingLeft: '2.5rem' }}
             placeholder="Buscar en el menú..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
