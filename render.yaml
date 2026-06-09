@@ -3,7 +3,7 @@ services:
   - type: web
     name: ingeniosnack-api
     runtime: node
-    rootDir: backend
+    rootDir: src/backend
     buildCommand: npm install && npx prisma migrate deploy
     startCommand: npm start
     envVars:
@@ -25,7 +25,7 @@ services:
   - type: web
     name: ingeniosnack
     runtime: static
-    rootDir: frontend
+    rootDir: src/frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
