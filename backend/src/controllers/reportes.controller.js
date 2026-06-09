@@ -7,34 +7,28 @@ const getReporteVentas = async (req, res) => {
   const { desde, hasta, periodo } = req.query;
 
   try {
-    let fechaDesde, fechaHasta;
-    const ahora = new Date();
+    // Obtener la fecha actual en Perú
+    const options = { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const peruDateStr = new Intl.DateTimeFormat('en-US', options).format(new Date()); 
+    const [month, day, year] = peruDateStr.split('/');
+    const hoyInicio = new Date(`${year}-${month}-${day}T00:00:00.000-05:00`);
+    const hoyFin = new Date(`${year}-${month}-${day}T23:59:59.999-05:00`);
 
     if (periodo === 'hoy' || (!periodo && !desde)) {
-      fechaDesde = new Date(ahora);
-      fechaDesde.setHours(0, 0, 0, 0);
-      fechaHasta = new Date(ahora);
-      fechaHasta.setHours(23, 59, 59, 999);
+      fechaDesde = hoyInicio;
+      fechaHasta = hoyFin;
     } else if (periodo === 'semana') {
-      fechaDesde = new Date(ahora);
-      fechaDesde.setDate(ahora.getDate() - 7);
-      fechaDesde.setHours(0, 0, 0, 0);
-      fechaHasta = new Date(ahora);
-      fechaHasta.setHours(23, 59, 59, 999);
+      fechaDesde = new Date(hoyInicio.getTime() - 6 * 24 * 60 * 60 * 1000);
+      fechaHasta = hoyFin;
     } else if (periodo === 'mes') {
-      fechaDesde = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
-      fechaHasta = new Date(ahora);
-      fechaHasta.setHours(23, 59, 59, 999);
+      fechaDesde = new Date(`${year}-${month}-01T00:00:00.000-05:00`);
+      fechaHasta = hoyFin;
     } else if (desde && hasta) {
-      fechaDesde = new Date(desde);
-      fechaDesde.setHours(0, 0, 0, 0);
-      fechaHasta = new Date(hasta);
-      fechaHasta.setHours(23, 59, 59, 999);
+      fechaDesde = new Date(`${desde}T00:00:00.000-05:00`);
+      fechaHasta = new Date(`${hasta}T23:59:59.999-05:00`);
     } else {
-      fechaDesde = new Date(ahora);
-      fechaDesde.setHours(0, 0, 0, 0);
-      fechaHasta = new Date(ahora);
-      fechaHasta.setHours(23, 59, 59, 999);
+      fechaDesde = hoyInicio;
+      fechaHasta = hoyFin;
     }
 
     // Pedidos entregados en el período
@@ -117,14 +111,16 @@ const getReporteVentas = async (req, res) => {
 // GET /api/reportes/dashboard — Resumen del día para el dashboard admin
 const getDashboard = async (req, res) => {
   try {
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-    const mañana = new Date(hoy);
-    mañana.setDate(mañana.getDate() + 1);
+    // Fechas en Perú
+    const options = { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const peruDateStr = new Intl.DateTimeFormat('en-US', options).format(new Date()); 
+    const [month, day, year] = peruDateStr.split('/');
+    const hoyInicio = new Date(`${year}-${month}-${day}T00:00:00.000-05:00`);
+    const hoyFin = new Date(`${year}-${month}-${day}T23:59:59.999-05:00`);
 
     // Pedidos de hoy
     const pedidosHoy = await prisma.pedido.findMany({
-      where: { created_at: { gte: hoy, lt: mañana } },
+      where: { created_at: { gte: hoyInicio, lte: hoyFin } },
     });
 
     const ingresosPendientes = pedidosHoy
