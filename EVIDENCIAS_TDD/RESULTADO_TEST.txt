@@ -1,12 +1,47 @@
 > ingeniosnack-root@1.0.0 test
 > jest
 
-PASS tests/menu.test.js
-PASS tests/stock.test.js
-PASS tests/pedido.test.js
+PASS tests/menu/menu_04_error_producto_duplicado.test.js
+PASS tests/menu/menu_02_precio_registrado_correctamente.test.js
+PASS tests/menu/menu_17_buscar_existente.test.js
+PASS tests/menu/menu_10_error_eliminar_inexistente.test.js
+PASS tests/menu/menu_13_actualizar_no_afecta_otros.test.js
+PASS tests/menu/menu_01_agregar_producto_nuevo.test.js
+PASS tests/menu/menu_18_buscar_case_insensitive.test.js
+PASS tests/menu/menu_20_buscar_datos_completos.test.js
+PASS tests/menu/menu_11_eliminar_case_insensitive.test.js
+PASS tests/menu/menu_12_actualizar_precio.test.js
+PASS tests/menu/menu_09_eliminar_no_afecta_otros.test.js
+PASS tests/menu/menu_06_error_precio_negativo.test.js
+PASS tests/menu/menu_08_eliminar_producto.test.js
+PASS tests/menu/menu_05_error_sin_nombre.test.js
+PASS tests/menu/menu_14_error_actualizar_inexistente.test.js
+PASS tests/stock/stock_15_hay_stock_sin_cantidad.test.js
+PASS tests/stock/stock_04_error_agregar_cero_unidades.test.js
+PASS tests/pedido/pedido_01_total_con_delivery_y_cafe_gratis.test.js
+PASS tests/stock/stock_09_error_reducir_cero.test.js
+PASS tests/menu/menu_03_agregar_inmutabilidad.test.js
+PASS tests/stock/stock_13_no_hay_stock.test.js
+PASS tests/stock/stock_06_reducir_correctamente.test.js
+PASS tests/stock/stock_08_error_stock_insuficiente.test.js
+PASS tests/menu/menu_07_agregar_precio_cero.test.js
+PASS tests/stock/stock_02_agregar_desde_stock_cero.test.js
+PASS tests/pedido/pedido_03_total_con_delivery_sin_cafe.test.js
+PASS tests/stock/stock_11_hay_stock_suficiente.test.js
+PASS tests/pedido/pedido_02_total_sin_delivery_sin_cafe.test.js
+PASS tests/stock/stock_12_stock_exacto.test.js
+PASS tests/stock/stock_10_reducir_inmutabilidad.test.js
+PASS tests/stock/stock_01_agregar_unidades.test.js
+PASS tests/stock/stock_03_agregar_inmutabilidad.test.js
+PASS tests/menu/menu_19_buscar_inexistente.test.js
+PASS tests/menu/menu_15_error_precio_negativo.test.js
+PASS tests/stock/stock_14_stock_en_cero.test.js
+PASS tests/stock/stock_07_reducir_hasta_cero.test.js
+PASS tests/menu/menu_16_actualizar_precio_cero.test.js
+PASS tests/stock/stock_05_error_agregar_negativo.test.js
 
-Test Suites: 3 passed, 3 total
+Test Suites: 38 passed, 38 total
 Tests:       38 passed, 38 total
 Snapshots:   0 total
-Time:        0.937 s, estimated 1 s
+Time:        2.684 s, estimated 3 s
 Ran all test suites.

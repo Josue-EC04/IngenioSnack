@@ -15,7 +15,7 @@ function agregarProducto(menu, nuevoProducto) {
         p => p.nombre.toLowerCase() === nuevoProducto.nombre.toLowerCase()
     );
     if (yaExiste) {
-        throw new Error(`El producto "${nuevoProducto.nombre}" ya existe en el menú`);
+        throw new Error(`El producto "${nuevoProducto.nombre}" ya existe en el menu`);
     }
     return [...menu, nuevoProducto];
 }
@@ -29,7 +29,7 @@ function agregarProducto(menu, nuevoProducto) {
 function eliminarProducto(menu, nombre) {
     const existe = menu.some(p => p.nombre.toLowerCase() === nombre.toLowerCase());
     if (!existe) {
-        throw new Error(`El producto "${nombre}" no existe en el menú`);
+        throw new Error(`El producto "${nombre}" no existe en el menu`);
     }
     return menu.filter(p => p.nombre.toLowerCase() !== nombre.toLowerCase());
 }
@@ -47,7 +47,7 @@ function actualizarPrecio(menu, nombre, nuevoPrecio) {
     }
     const existe = menu.some(p => p.nombre.toLowerCase() === nombre.toLowerCase());
     if (!existe) {
-        throw new Error(`El producto "${nombre}" no existe en el menú`);
+        throw new Error(`El producto "${nombre}" no existe en el menu`);
     }
     return menu.map(p =>
         p.nombre.toLowerCase() === nombre.toLowerCase()
