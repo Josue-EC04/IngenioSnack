@@ -1,0 +1,14 @@
+quie> ingeniosnack-root@1.0.0 test
+> jest
+
+PASS tests/pedido.test.js
+  calcularTotal
+    √ debe calcular el total sumando productos, agregando delivery de S/ 5.00 y aplicando café gratis si aplica (2 ms)
+    √ debe calcular el total sin delivery y sin café gratis (1 ms)
+    √ debe calcular el total con delivery pero sin café gratis (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        0.527 s, estimated 1 s
+Ran all test suites.
