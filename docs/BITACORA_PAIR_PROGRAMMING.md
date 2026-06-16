@@ -20,7 +20,7 @@
      ![Panel de Administrador - Pedidos](evidencias_pair_programming/4_admin_pedidos.png)
   4. **Validación del Perfil y Fidelidad:** Revisamos la vista "Mi Perfil" del usuario, confirmando que el sistema registra los puntos acumulados (10 puntos para el Café de la Lealtad) y muestra el historial de cupones canjeados correctamente.
      ![Perfil y Fidelidad](evidencias_pair_programming/5_perfil_fidelidad.png)
-- **Duración:** ~1 hora y 15 minutos (según tiempo de reunión).
+- **Duración:** ~1 hora y 15 minutos.
 - **Observaciones/Reflexiones:**
   - *Sameer (Cliente):* Validó que la interfaz es intuitiva tanto para hacer el pedido como para canjear los cupones. El sistema de puntos de fidelidad se actualiza correctamente y motiva a seguir comprando.
   - *Josue (Desarrollador):* La reunión fue muy útil para comprobar que la lógica de negocio construida mediante TDD en el backend (cálculos de pedidos, descuentos) se refleja correctamente y sin errores en la interfaz de usuario frontend. El flujo de comunicación entre el carrito del cliente y el dashboard en vivo del administrador funciona a la perfección.
