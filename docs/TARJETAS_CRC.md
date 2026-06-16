@@ -41,7 +41,8 @@ Este documento contiene el diseño de clases y componentes del sistema web **Ing
 | **Responsabilidades** | **Colaboradores** |
 | - Generar un número de pedido único y rastreable. | |
 | - Registrar el estado de preparación (`recibido`, `preparando`, `listo`, `entregado`). | `NotificadorSocket` |
-| - Calcular el total del importe considerando el subtotal de ítems y promociones. | `DetallePedido`, `Producto` |
+| - Gestionar el tipo de entrega (recojo en tienda o delivery) y la dirección asociada. | |
+| - Calcular el total del importe considerando el subtotal de ítems, costo de delivery y promociones. | `DetallePedido`, `Producto` |
 | - Registrar la asociación del usuario que ordenó. | `Usuario` |
 | - Consumir un cupón de fidelidad si aplica descuento. | `CuponFidelidad` |
 | - Registrar la ganancia de puntos correspondientes por la compra. | `HistorialPuntos` |

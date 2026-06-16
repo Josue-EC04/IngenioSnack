@@ -117,8 +117,6 @@ Esta iteración añade valor agregado sobre la base estable del MVP: incentiva l
 | **HU04** | Reporte de Productos Más Vendidos | **3** | Complejidad media. Consultas agregadas (GROUP BY/COUNT) filtradas por rango de fechas y representadas en gráficos dinámicos. |
 | | **TOTAL ITERACIÓN 2** | **8 Puntos** | |
 
-*(Nota: En la lista de requerimientos original se repetía HU03 en la Iteración 2 con 3 puntos; se ha corregido el código de la historia para HU04 ya que se refiere al reporte de productos más vendidos durante los días de examen).*
-
 ---
 
 ### 📊 Resumen General del Proyecto

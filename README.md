@@ -28,10 +28,10 @@ El proyecto sigue una estructura orientada al desarrollo ágil y TDD:
 - `/src/frontend`: Código fuente de la aplicación cliente (React).
 - `/src/backend`: Código fuente de la API y servidor (Node.js).
 - `/tests`: Pruebas unitarias bajo el enfoque TDD.
-- `/docs`: Documentación técnica del sistema.
+- `/docs`: Documentación técnica del sistema. Incluye las **Historias de Usuario** (`HISTORIAS_USUARIO.md`) y el diseño basado en **Tarjetas CRC** (`TARJETAS_CRC.md`).
 - `/EVIDENCIAS_TDD`: Capturas del flujo Red-Green-Refactor.
-- `BITACORA_PAIR_PROGRAMMING.md`: Registro de las sesiones de trabajo en pareja.
-- `REFACTORIZACION.md`: Registro de los code smells solucionados y mejoras de clean code.
+- `BITACORA_PAIR_PROGRAMMING.md`: Registro de las sesiones de trabajo en pareja (ubicado en `/docs`).
+- `REFACTORIZACION.md`: Registro de los code smells solucionados y mejoras de clean code (ubicado en `/docs`).
 
 ## 🚀 Configuración y Ejecución Local
 
