@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import { connectSocket } from '../../services/socket';
 import toast from 'react-hot-toast';
-import { RefreshCw, ChevronDown, Clock, ChefHat, CheckCircle, Package, Sandwich, Coffee, Cookie, BoxSelect, AlertCircle, Undo2, Gift } from 'lucide-react';
+import { RefreshCw, ChevronDown, Clock, ChefHat, CheckCircle, Package, Sandwich, Coffee, Cookie, BoxSelect, AlertCircle, Undo2, Gift, Bike, MapPin } from 'lucide-react';
 
 const ESTADOS = ['todos', 'recibido', 'preparando', 'listo', 'entregado'];
 const SIGUIENTE_ESTADO = {
@@ -71,6 +71,29 @@ function PedidoCard({ pedido, onCambiarEstado, loading }) {
         </div>
       )}
 
+      {/* Tipo de entrega */}
+      <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-xl"
+        style={
+          pedido.delivery
+            ? { background: '#fff3e6', border: '1px solid #fed7aa' }
+            : { background: '#f0fdf4', border: '1px solid #86efac' }
+        }>
+        {pedido.delivery
+          ? <Bike size={14} className="text-orange-500 flex-shrink-0" />
+          : <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
+        }
+        <span className="text-xs font-semibold"
+          style={{ color: pedido.delivery ? '#c2410c' : '#15803d' }}>
+          {pedido.delivery ? 'DELIVERY' : 'RECOJO EN TIENDA'}
+        </span>
+        {pedido.delivery && pedido.direccion && (
+          <span className="text-xs text-orange-700 ml-1 flex items-center gap-1 truncate">
+            <MapPin size={11} />
+            {pedido.direccion}
+          </span>
+        )}
+      </div>
+
       {/* Productos */}
       <div className="glass rounded-2xl p-4 mb-3">
         {pedido.detalles?.map((det) => (
@@ -119,7 +142,12 @@ function PedidoCard({ pedido, onCambiarEstado, loading }) {
             className="flex-1 py-2.5 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-95"
             style={{ background: sig.color }}
           >
-            {loading ? 'Actualizando...' : sig.label}
+            {loading
+              ? 'Actualizando...'
+              : pedido.delivery && pedido.estado === 'preparando'
+                ? 'Enviar Delivery'
+                : sig.label
+            }
           </button>
         )}
       </div>

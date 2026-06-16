@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
-import { Trash2, Plus, Minus, ShoppingCart, CheckCircle, Sandwich, Coffee, Cookie, Frown, Wallet, Ticket, X, Gift } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingCart, CheckCircle, Sandwich, Coffee, Cookie, Wallet, Ticket, X, Gift, MapPin, Store, Bike } from 'lucide-react';
+
+const COSTO_DELIVERY = 5.00;
 
 export default function CartPage() {
   const { items, removeItem, updateCantidad, clearCart, total, removeItems } = useCart();
@@ -11,7 +13,12 @@ export default function CartPage() {
   const [codigoInput, setCodigoInput] = useState('');
   const [validandoCupon, setValidandoCupon] = useState(false);
   const [cuponAplicado, setCuponAplicado] = useState(null); // { codigo, regalo: { id, nombre } }
+  const [tipoEntrega, setTipoEntrega] = useState('tienda'); // 'tienda' | 'delivery'
+  const [direccion, setDireccion] = useState('');
   const navigate = useNavigate();
+
+  const esDelivery = tipoEntrega === 'delivery';
+  const totalConDelivery = esDelivery ? total + COSTO_DELIVERY : total;
 
   const handleAplicarCupon = async () => {
     if (!codigoInput.trim()) return;
@@ -41,11 +48,17 @@ export default function CartPage() {
       toast.error('Tu carrito está vacío');
       return;
     }
+    if (esDelivery && !direccion.trim()) {
+      toast.error('Por favor ingresa tu dirección de entrega para el delivery.');
+      return;
+    }
     setLoading(true);
     try {
       const payload = {
         items: items.map((i) => ({ producto_id: i.producto_id, cantidad: i.cantidad })),
         ...(cuponAplicado ? { codigo_cupon: cuponAplicado.codigo } : {}),
+        delivery: esDelivery,
+        ...(esDelivery ? { direccion: direccion.trim() } : {}),
       };
       const res = await api.post('/pedidos', payload);
       clearCart();
@@ -68,8 +81,6 @@ export default function CartPage() {
       setLoading(false);
     }
   };
-
-
 
   return (
     <div className="page-content px-4 pt-4 pb-32">
@@ -210,6 +221,73 @@ export default function CartPage() {
         </div>
       )}
 
+      {/* Sección de tipo de entrega */}
+      {(items.length > 0 || cuponAplicado) && (
+        <div className="bg-white rounded-2xl p-4 shadow-sm mb-4 animate-fade-in-up" style={{ animationDelay: '0.08s' }}>
+          <div className="flex items-center gap-2 mb-3">
+            <MapPin size={16} style={{ color: '#ff6b35' }} />
+            <p className="text-sm font-semibold" style={{ color: '#3e1f00' }}>¿Cómo quieres recibir tu pedido?</p>
+          </div>
+
+          {/* Toggle Tienda / Delivery */}
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <button
+              id="cart-entrega-tienda"
+              onClick={() => setTipoEntrega('tienda')}
+              className="flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border-2 transition-all"
+              style={
+                tipoEntrega === 'tienda'
+                  ? { borderColor: '#ff6b35', background: '#fff3e6', color: '#ff6b35' }
+                  : { borderColor: '#e5e0d9', background: 'white', color: '#6b5c50' }
+              }
+            >
+              <Store size={20} />
+              <span className="text-xs font-semibold">Recojo en Tienda</span>
+              <span className="text-xs font-bold" style={{ color: tipoEntrega === 'tienda' ? '#22c55e' : '#9ca3af' }}>Gratis</span>
+            </button>
+
+            <button
+              id="cart-entrega-delivery"
+              onClick={() => setTipoEntrega('delivery')}
+              className="flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border-2 transition-all"
+              style={
+                tipoEntrega === 'delivery'
+                  ? { borderColor: '#ff6b35', background: '#fff3e6', color: '#ff6b35' }
+                  : { borderColor: '#e5e0d9', background: 'white', color: '#6b5c50' }
+              }
+            >
+              <Bike size={20} />
+              <span className="text-xs font-semibold">Delivery</span>
+              <span className="text-xs font-bold" style={{ color: tipoEntrega === 'delivery' ? '#ff6b35' : '#9ca3af' }}>+S/ 5.00</span>
+            </button>
+          </div>
+
+          {/* Campo de dirección (solo si delivery) */}
+          {esDelivery && (
+            <div className="animate-fade-in-up">
+              <label htmlFor="cart-direccion" className="text-xs font-semibold text-gray-600 mb-1.5 flex items-center gap-1">
+                <MapPin size={12} className="text-orange-500" />
+                Dirección de entrega <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                id="cart-direccion"
+                rows={2}
+                className="input-field w-full text-sm resize-none"
+                placeholder="Ej: Av. Universitaria 123, Piso 2, Apt 301..."
+                value={direccion}
+                onChange={(e) => setDireccion(e.target.value)}
+                style={{ minHeight: '64px' }}
+              />
+              {!direccion.trim() && (
+                <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
+                  <span>⚠</span> La dirección es obligatoria para delivery
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Resumen */}
       <div className="bg-white rounded-2xl p-4 shadow-sm mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <h3 className="font-bold text-gray-700 mb-3" style={{ fontFamily: 'var(--font-display)' }}>Resumen</h3>
@@ -229,10 +307,20 @@ export default function CartPage() {
             <span className="text-green-600 font-semibold">S/ 0.00</span>
           </div>
         )}
+        {/* Costo de delivery */}
+        {esDelivery && (
+          <div className="flex justify-between text-sm text-orange-600 mb-1">
+            <span className="flex items-center gap-1">
+              <Bike size={14} />
+              Costo de delivery
+            </span>
+            <span className="font-semibold">S/ {COSTO_DELIVERY.toFixed(2)}</span>
+          </div>
+        )}
         <div className="border-t border-gray-100 mt-3 pt-3 flex justify-between font-bold">
           <span style={{ color: '#3e1f00', fontFamily: 'var(--font-display)' }}>Total a pagar</span>
           <span style={{ color: '#ff6b35', fontFamily: 'var(--font-display)', fontSize: '1.1rem' }}>
-            S/ {total.toFixed(2)}
+            S/ {totalConDelivery.toFixed(2)}
           </span>
         </div>
         {cuponAplicado && (
@@ -240,9 +328,14 @@ export default function CartPage() {
             <Gift size={12} /> El Café Americano gratis no se suma al total
           </p>
         )}
-        <div className="mt-2 p-2 bg-amber-50 rounded-lg">
-          <p className="text-xs text-amber-700 text-center flex items-center justify-center gap-1">
-            <Wallet size={14} /> Pago: <strong>Contra entrega en caja</strong>
+        <div className="mt-2 p-2 rounded-lg" style={{ background: esDelivery ? '#fff3e6' : '#fffbeb' }}>
+          <p className="text-xs text-center flex items-center justify-center gap-1"
+            style={{ color: esDelivery ? '#c2410c' : '#92400e' }}>
+            <Wallet size={14} />
+            {esDelivery
+              ? <span>Pago: <strong>Contra entrega al repartidor</strong></span>
+              : <span>Pago: <strong>Contra entrega en caja</strong></span>
+            }
           </p>
         </div>
       </div>
@@ -252,7 +345,7 @@ export default function CartPage() {
         <button
           id="cart-confirmar"
           onClick={handleConfirmar}
-          disabled={loading}
+          disabled={loading || (esDelivery && !direccion.trim())}
           className="btn-primary w-full justify-center text-base py-4 shadow-xl"
           style={{ borderRadius: '16px' }}
         >
@@ -264,10 +357,13 @@ export default function CartPage() {
           ) : (
             <span className="flex items-center gap-2">
               <CheckCircle size={20} />
-              Confirmar Pedido · S/ {total.toFixed(2)}
+              Confirmar Pedido · S/ {totalConDelivery.toFixed(2)}
             </span>
           )}
         </button>
+        {esDelivery && !direccion.trim() && (
+          <p className="text-center text-xs text-red-400 mt-2">Ingresa tu dirección para continuar</p>
+        )}
       </div>
     </div>
   );

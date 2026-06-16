@@ -99,7 +99,7 @@ const procesarPuntosFidelidad = async (pedidoId, userId, io) => {
 
 // POST /api/pedidos — Crear pedido
 const createPedido = async (req, res) => {
-  const { items, codigo_cupon } = req.body;
+  const { items, codigo_cupon, delivery, direccion } = req.body;
   const userId = req.user.id;
   const io = req.app.get('io');
 
@@ -109,6 +109,11 @@ const createPedido = async (req, res) => {
 
   if (items.length === 0 && !codigo_cupon) {
     return res.status(400).json({ error: 'El carrito está vacío y no se ha aplicado un cupón' });
+  }
+
+  // Validar delivery: si se seleccionó, la dirección es obligatoria
+  if (delivery && (!direccion || !direccion.trim())) {
+    return res.status(400).json({ error: 'La dirección de entrega es obligatoria para pedidos con delivery.' });
   }
 
   try {
@@ -149,6 +154,12 @@ const createPedido = async (req, res) => {
         subtotal,
       };
     });
+
+    // Agregar costo de delivery si aplica
+    const COSTO_DELIVERY = 5.00;
+    if (delivery) {
+      total += COSTO_DELIVERY;
+    }
 
     // Validar cupón si fue proporcionado
     let cupon = null;
@@ -201,6 +212,8 @@ const createPedido = async (req, res) => {
           estado: 'recibido',
           metodo_pago: 'contra_entrega',
           codigo_cupon: codigo_cupon || null,
+          delivery: delivery ? true : false,
+          direccion: delivery ? (direccion?.trim() || null) : null,
           detalles: {
             create: detallesData,
           },
@@ -269,8 +282,12 @@ const createPedido = async (req, res) => {
       io.to(`user_${userId}`).emit('pedido_creado', pedido);
     }
 
+    const mensajePedido = delivery
+      ? `Tu pedido ${numeroPedido} ha sido recibido y será enviado a tu dirección.`
+      : `Tu pedido ${numeroPedido} está siendo preparado. Recógelo en la cafetería.`;
+
     res.status(201).json({
-      message: `Tu pedido ${numeroPedido} está siendo preparado. Recógelo en la cafetería.`,
+      message: mensajePedido,
       pedido,
     });
   } catch (error) {

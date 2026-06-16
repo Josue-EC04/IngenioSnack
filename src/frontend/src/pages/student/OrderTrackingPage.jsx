@@ -4,7 +4,7 @@ import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { connectSocket } from '../../services/socket';
 import toast from 'react-hot-toast';
-import { ArrowLeft, Package, CheckCircle, Clock, ChefHat, Sandwich, Coffee, Cookie, Frown, PartyPopper, Wallet, Gift } from 'lucide-react';
+import { ArrowLeft, Package, CheckCircle, Clock, ChefHat, Sandwich, Coffee, Cookie, Frown, PartyPopper, Wallet, Gift, Bike, MapPin } from 'lucide-react';
 
 const ESTADOS = [
   { key: 'recibido',   icon: Clock,       label: 'Recibido',            desc: 'Tu pedido fue recibido' },
@@ -100,8 +100,8 @@ export default function OrderTrackingPage() {
         </div>
       </div>
 
-      {/* Estado destacado */}
-      {pedido.estado === 'listo' && (
+      {/* Estado destacado para pedidos listos */}
+      {pedido.estado === 'listo' && !pedido.delivery && (
         <div className="animate-bounce-in mb-6 p-4 rounded-2xl text-center"
           style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', color: 'white' }}>
           <div className="flex justify-center mb-2">
@@ -111,6 +111,20 @@ export default function OrderTrackingPage() {
             ¡Tu pedido está listo!
           </p>
           <p className="text-green-100 text-sm mt-1">Pasa a la caja a recogerlo y pagar</p>
+        </div>
+      )}
+
+      {/* Estado destacado para delivery: "En camino" */}
+      {pedido.estado === 'listo' && pedido.delivery && (
+        <div className="animate-bounce-in mb-6 p-4 rounded-2xl text-center"
+          style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)', color: 'white' }}>
+          <div className="flex justify-center mb-2">
+            <Bike size={36} color="white" />
+          </div>
+          <p className="font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>
+            ¡Tu pedido va en camino!
+          </p>
+          <p className="text-orange-100 text-sm mt-1">Tu repartidor está dirigiéndose a tu dirección</p>
         </div>
       )}
 
@@ -187,8 +201,24 @@ export default function OrderTrackingPage() {
             <span style={{ color: '#ff6b35', fontFamily: 'var(--font-display)' }}>S/ {pedido.total.toFixed(2)}</span>
           </div>
           <p className="text-xs text-gray-400 flex items-center justify-center gap-1 mt-1">
-            <Wallet size={12} /> Pago contra entrega en caja
+            <Wallet size={12} />
+            {pedido.delivery
+              ? 'Pago contra entrega al repartidor'
+              : 'Pago contra entrega en caja'
+            }
           </p>
+
+          {/* Información de delivery */}
+          {pedido.delivery && (
+            <div className="mt-3 p-3 rounded-xl flex items-start gap-2"
+              style={{ background: '#fff3e6', border: '1px solid #fed7aa' }}>
+              <MapPin size={16} className="text-orange-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-semibold text-orange-700">Dirección de entrega</p>
+                <p className="text-sm text-orange-900 mt-0.5">{pedido.direccion}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

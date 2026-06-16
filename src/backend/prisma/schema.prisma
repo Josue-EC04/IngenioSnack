@@ -50,6 +50,8 @@ model Pedido {
   total          Float
   metodo_pago    String   @default("contra_entrega")
   codigo_cupon   String?  // Cupón de fidelidad canjeado en este pedido (si aplica)
+  delivery       Boolean  @default(false)   // Indica si el pedido es para delivery
+  direccion      String?  // Dirección de entrega (solo si delivery = true)
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
