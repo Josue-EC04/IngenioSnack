@@ -1,0 +1,38 @@
+// Validadora atómica y reutilizable (Elimina duplicación)
+const verificarCantidadPositiva = (cantidad, accion) => {
+    if (Number(cantidad) <= 0 || isNaN(cantidad)) {
+        throw new Error(`La cantidad a ${accion} debe ser mayor a 0`);
+    }
+};
+
+const GestorStock = {
+    agregarStock(producto, cantidad) {
+        verificarCantidadPositiva(cantidad, 'agregar');
+        
+        // El operador spread (...producto) asegura inmutabilidad real sin perder propiedades previas
+        return { ...producto, stock: (producto?.stock || 0) + Number(cantidad) };
+    },
+
+    reducirStock(producto, cantidad) {
+        verificarCantidadPositiva(cantidad, 'reducir');
+
+        const stockActual = producto?.stock || 0;
+        if (stockActual - cantidad < 0) {
+            throw new Error(`Stock insuficiente. Stock actual: ${stockActual}, solicitado: ${cantidad}`);
+        }
+
+        return { ...producto, stock: stockActual - cantidad };
+    },
+
+    // Uso de parámetros por defecto de ES6 para reemplazar el control manual de undefined
+    hayStock(producto, cantidad = 1) {
+        return (producto?.stock || 0) >= cantidad;
+    }
+};
+
+// Interfaz de exportación compatible con tus 15 tests existentes
+module.exports = {
+    agregarStock: GestorStock.agregarStock,
+    reducirStock: GestorStock.reducirStock,
+    hayStock: GestorStock.hayStock
+};
