@@ -16,6 +16,7 @@ import MenuPage from './pages/student/MenuPage';
 import CartPage from './pages/student/CartPage';
 import OrderTrackingPage from './pages/student/OrderTrackingPage';
 import ProfilePage from './pages/student/ProfilePage';
+import MiComboPage from './pages/student/MiComboPage';
 
 // Páginas admin
 import AdminLoginPage from './pages/admin/AdminLoginPage';
@@ -24,6 +25,7 @@ import AdminPedidosPage from './pages/admin/AdminPedidosPage';
 import AdminMenuPage from './pages/admin/AdminMenuPage';
 import AdminReportesPage from './pages/admin/AdminReportesPage';
 import AdminFidelidadPage from './pages/admin/AdminFidelidadPage';
+import AdminSuscripcionesPage from './pages/admin/AdminSuscripcionesPage';
 
 export default function App() {
   return (
@@ -72,6 +74,7 @@ export default function App() {
               <Route path="/carrito" element={<CartPage />} />
               <Route path="/pedido/:id" element={<OrderTrackingPage />} />
               <Route path="/perfil" element={<ProfilePage />} />
+              <Route path="/mi-combo" element={<MiComboPage />} />
             </Route>
 
             {/* Rutas de admin */}
@@ -85,6 +88,7 @@ export default function App() {
               <Route path="/admin/menu" element={<AdminMenuPage />} />
               <Route path="/admin/reportes" element={<AdminReportesPage />} />
               <Route path="/admin/fidelidad" element={<AdminFidelidadPage />} />
+              <Route path="/admin/suscripciones" element={<AdminSuscripcionesPage />} />
             </Route>
 
             {/* Fallback */}

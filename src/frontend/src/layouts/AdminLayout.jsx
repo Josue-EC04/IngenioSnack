@@ -5,7 +5,7 @@ import { connectSocket } from '../services/socket';
 import { useEffect } from 'react';
 import {
   LayoutDashboard, ShoppingBag, UtensilsCrossed, BarChart3, Star,
-  LogOut, Coffee, Menu, X, Bell, Crown,
+  LogOut, Coffee, Menu, X, Bell, Crown, CalendarDays
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/admin/pedidos', label: 'Pedidos en Vivo', icon: ShoppingBag },
   { to: '/admin/menu', label: 'Gestión Menú', icon: UtensilsCrossed },
+  { to: '/admin/suscripciones', label: 'Combos Diarios', icon: CalendarDays },
   { to: '/admin/reportes', label: 'Reportes', icon: BarChart3 },
   { to: '/admin/fidelidad', label: 'Fidelización', icon: Star },
 ];

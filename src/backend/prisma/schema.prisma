@@ -15,12 +15,15 @@ model User {
   codigo_estudiante String?  @unique
   password_hash     String
   rol               String   @default("estudiante") // "estudiante" | "admin"
+  facultad          String   @default("FIS")
   puntos_fidelidad  Int      @default(0)
   created_at        DateTime @default(now())
 
   pedidos           Pedido[]
   cupones           CuponFidelidad[]
   historial_puntos  HistorialPuntos[]
+  suscripcion       Suscripcion?
+  push_subscriptions WebPushSubscription[]
 
   @@map("users")
 }
@@ -38,6 +41,8 @@ model Producto {
   updated_at  DateTime @updatedAt
 
   detalles    DetallePedido[]
+  suscripciones_bebida Suscripcion[] @relation("BebidaSuscripcion")
+  suscripciones_snack  Suscripcion[] @relation("SnackSuscripcion")
 
   @@map("productos")
 }
@@ -102,4 +107,34 @@ model HistorialPuntos {
   pedido        Pedido? @relation(fields: [pedido_id], references: [id])
 
   @@map("historial_puntos")
+}
+
+model Suscripcion {
+  id          Int      @id @default(autoincrement())
+  user_id     Int      @unique
+  bebida_id   Int?
+  snack_id    Int?
+  dias_activos String  @default("1,2,3,4,5") // CSV de dias
+  activa      Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  user        User      @relation(fields: [user_id], references: [id])
+  bebida      Producto? @relation("BebidaSuscripcion", fields: [bebida_id], references: [id])
+  snack       Producto? @relation("SnackSuscripcion", fields: [snack_id], references: [id])
+
+  @@map("suscripciones")
+}
+
+model WebPushSubscription {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  endpoint    String   @unique
+  p256dh      String
+  auth        String
+  created_at  DateTime @default(now())
+
+  user        User     @relation(fields: [user_id], references: [id])
+
+  @@map("web_push_subscriptions")
 }

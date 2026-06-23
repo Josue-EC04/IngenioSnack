@@ -9,7 +9,9 @@ const productosRoutes = require('./routes/productos.routes');
 const pedidosRoutes = require('./routes/pedidos.routes');
 const fidelidadRoutes = require('./routes/fidelidad.routes');
 const reportesRoutes = require('./routes/reportes.routes');
+const suscripcionRoutes = require('./routes/suscripcion.routes');
 const { initSocket } = require('./socket/socketHandler');
+const { initCronJobs } = require('./cron/notificaciones.job');
 
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
@@ -44,11 +46,15 @@ app.use('/api/productos', productosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 app.use('/api/fidelidad', fidelidadRoutes);
 app.use('/api/reportes', reportesRoutes);
+app.use('/api/suscripciones', suscripcionRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'IngenioSnack API funcionando 🍔' });
+  res.status(200).json({ status: 'ok', message: 'IngenioSnack API funcionando 🍔' });
 });
+
+// Start Cron Jobs
+initCronJobs();
 
 // Inicializar Socket.io
 initSocket(io);

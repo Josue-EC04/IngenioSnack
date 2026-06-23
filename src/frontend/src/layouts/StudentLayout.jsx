@@ -6,6 +6,7 @@ import { Home, UtensilsCrossed, ShoppingCart, User, Coffee } from 'lucide-react'
 const NAV_ITEMS = [
   { to: '/', label: 'Inicio', icon: Home, exact: true },
   { to: '/menu', label: 'Menú', icon: UtensilsCrossed },
+  { to: '/mi-combo', label: 'Suscripción', icon: Coffee },
   { to: '/carrito', label: 'Carrito', icon: ShoppingCart, showBadge: true },
   { to: '/perfil', label: 'Perfil', icon: User },
 ];
