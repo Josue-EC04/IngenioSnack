@@ -62,39 +62,8 @@
 ---
 
 ## 📐 Representación Visual del Canvas
-
-```
-┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
-│  PROBLEMA    │  SOLUCIÓN    │  PROPUESTA   │  VENTAJA     │  SEGMENTO    │
-│              │              │  DE VALOR    │  INJUSTA     │  CLIENTES    │
-│  Fila larga  │  App de      │  ÚNICA       │              │              │
-│  en recreo   │  suscripción │  "Tu combo   │  App ya      │  Estudiantes │
-│  (15-30min)  │  diaria      │  listo antes │  existe,     │  FIS-UNCP    │
-│              │              │  de bajar"   │  datos reales│  3+ días/sem │
-│  Rutina de   │  Configuras  │              │              │              │
-│  pedir       │  1 vez, listo│              │  Confianza   │  Futuro:     │
-│  siempre lo  │  cada mañana │              │  del Sr.     │  Facultad de │
-│  mismo       │              │              │  Julio       │  Contables   │
-│              │              │              │              │              │
-│  Olvidar     │  Notifica-   │              │              │              │
-│  comer en    │  ción diaria │              │              │              │
-│  exámenes    │  7:00 AM     │              │              │              │
-├──────────────┴──────────────┼──────────────┼──────────────┴──────────────┤
-│  MÉTRICAS CLAVE             │  CANALES     │  FUENTES DE INGRESOS        │
-│                             │              │                              │
-│  • Suscripciones activas    │  • App web   │  • Combos diarios (S/7)     │
-│  • Tasa de confirmación     │    (ya existe│  • Fidelidad: 5 días = 1    │
-│  • Retención semana 4       │  • WhatsApp  │    café gratis               │
-│  • Ingresos recurrentes     │  • Flyers    │  • Expansión Contables:     │
-│  • Tiempo en caja           │    físicos   │    S/3,000 del Decano       │
-├─────────────────────────────┴──────────────┴─────────────────────────────┤
-│  ESTRUCTURA DE COSTOS                                                     │
-│  • Módulo de suscripción (ya desarrollado en la Iteración 1)             │
-│  • Notificaciones push: Firebase (gratuito)                               │
-│  • Insumos adicionales por demanda predecible                             │
-│  • Costo fijo adicional para el Sr. Julio: S/ 0.00                       │
-└───────────────────────────────────────────────────────────────────────────┘
-```
+> *Ver archivo visual: `LIENZO_LEAN_CANVAS.png`*
+![Lienzo Lean Canvas — Estudiante FIS-UNCP](LIENZO_LEAN_CANVAS.png)
 
 ---
 *Semana 12 — IS055B Metodología de Desarrollo de Software*
