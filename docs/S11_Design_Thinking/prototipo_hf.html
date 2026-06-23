@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototipo de Alta Fidelidad - IngenioSnack</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Outfit', sans-serif;
+            color: #3e1f00;
+        }
+
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #fff8f0;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 0 0 12px #1f2937;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-frame {
+            width: 500px;
+            height: 812px;
+            background: #fff8f0;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-bg {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: white;
+            padding: 24px 20px;
+            padding-top: 40px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(255, 107, 53, 0.05), 0 2px 4px -1px rgba(255, 107, 53, 0.03);
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: white;
+            font-weight: 600;
+            border-radius: 16px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px 0 rgba(255, 107, 53, 0.39);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #ff6b35;
+            font-weight: 600;
+            border-radius: 16px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 2px solid #ff6b35;
+        }
+
+        .day-bubble {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .day-active {
+            background: #ff6b35;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .day-inactive {
+            background: white;
+            color: #9ca3af;
+            border: 1px solid #e5e7eb;
+        }
+
+        .option-radio {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            background: white;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .option-radio.selected {
+            border-color: #ff6b35;
+            background: #fff5f0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla 1: Estudiante - Configurar Combo -->
+    <div class="phone-frame">
+        <div class="header-bg rounded-b-3xl">
+            <div class="flex items-center gap-3">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                <h1 class="text-xl font-bold font-display tracking-wide m-0" style="color: white;">Mi Combo Favorito</h1>
+            </div>
+            <p class="text-orange-100 text-sm mt-2 opacity-90">Tu desayuno listo todos los días sin hacer fila.</p>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-5 space-y-5">
+            
+            <div class="glass-card p-4">
+                <h3 class="font-bold mb-3 flex items-center gap-2 text-gray-800"><i data-lucide="coffee" class="text-orange-500 w-5 h-5"></i> Elige tu Bebida</h3>
+                <div class="option-radio selected">
+                    <span class="font-semibold text-gray-800">Café con leche</span>
+                    <i data-lucide="check-circle-2" class="text-orange-500 w-5 h-5"></i>
+                </div>
+                <div class="option-radio">
+                    <span class="font-medium text-gray-600">Café americano</span>
+                    <div class="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                </div>
+            </div>
+
+            <div class="glass-card p-4">
+                <h3 class="font-bold mb-3 flex items-center gap-2 text-gray-800"><i data-lucide="sandwich" class="text-orange-500 w-5 h-5"></i> Elige tu Sándwich</h3>
+                <div class="option-radio selected">
+                    <span class="font-semibold text-gray-800">Sándwich de Pollo</span>
+                    <i data-lucide="check-circle-2" class="text-orange-500 w-5 h-5"></i>
+                </div>
+                <div class="option-radio">
+                    <span class="font-medium text-gray-600">Sándwich Mixto</span>
+                    <div class="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                </div>
+            </div>
+
+            <div class="glass-card p-4">
+                <h3 class="font-bold mb-3 flex items-center gap-2 text-gray-800"><i data-lucide="calendar-days" class="text-orange-500 w-5 h-5"></i> Días Activos</h3>
+                <div class="flex justify-between mt-2">
+                    <div class="day-bubble day-active">L</div>
+                    <div class="day-bubble day-active">M</div>
+                    <div class="day-bubble day-active">X</div>
+                    <div class="day-bubble day-active">J</div>
+                    <div class="day-bubble day-inactive">V</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="p-5 bg-white border-t border-gray-100 pb-8 rounded-t-3xl shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
+            <div class="flex justify-between items-end mb-4">
+                <span class="text-gray-500 font-medium">Total diario</span>
+                <span class="text-2xl font-bold font-display text-orange-500">S/ 7.00</span>
+            </div>
+            <button class="btn-primary w-full text-lg">
+                <i data-lucide="save" class="w-5 h-5"></i> Guardar mi Combo
+            </button>
+        </div>
+    </div>
+
+    <!-- Pantalla 2: Notificación Push (Simulada en Lock Screen) -->
+    <div class="phone-frame" style="background: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=375&auto=format&fit=crop') center/cover;">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        
+        <div class="relative z-10 flex flex-col items-center pt-20 h-full w-full">
+            <div class="text-white text-6xl font-extralight mb-2">07:00</div>
+            <div class="text-white/80 font-medium text-lg mb-12">Martes, 10 de Junio</div>
+
+            <!-- Notificación -->
+            <div class="bg-white/90 backdrop-blur-xl w-11/12 rounded-3xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-orange-500 w-6 h-6 rounded-md flex items-center justify-center">
+                            <i data-lucide="coffee" class="text-white w-4 h-4"></i>
+                        </div>
+                        <span class="font-bold text-gray-800 text-sm">IngenioSnack</span>
+                    </div>
+                    <span class="text-gray-500 text-xs font-medium">ahora</span>
+                </div>
+                
+                <h4 class="font-bold text-gray-900 text-[15px] leading-tight mb-1">¡Buenos días, Ana! 👋</h4>
+                <p class="text-gray-600 text-sm mb-3">Tu combo de hoy (Café + Pollo) te espera. ¿Confirmas tu pedido por S/ 7.00?</p>
+                
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 rounded-xl text-sm transition">Saltar Hoy</button>
+                    <button class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 rounded-xl text-sm transition">¡Confirmar!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla 3: Admin Vista Diaria -->
+    <div class="admin-frame">
+        <!-- Sidebar and Header combined for mockup -->
+        <div class="flex h-full">
+            <div class="w-16 bg-[#2a1400] flex flex-col items-center py-6 gap-6 shrink-0">
+                <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
+                    <i data-lucide="coffee" class="text-white"></i>
+                </div>
+                <i data-lucide="layout-dashboard" class="text-orange-200/50"></i>
+                <i data-lucide="clipboard-list" class="text-orange-500"></i>
+                <i data-lucide="users" class="text-orange-200/50"></i>
+            </div>
+            
+            <div class="flex-1 bg-white flex flex-col">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold font-display text-[#3e1f00]">Combos de Hoy</h1>
+                        <p class="text-gray-500 text-sm font-medium mt-1">Martes, 10 Jun • <span class="text-orange-500">12 Confirmados</span></p>
+                    </div>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-lg shadow-green-500/30 flex items-center gap-2">
+                        <i data-lucide="check-double" class="w-4 h-4"></i> Marcar todos listos
+                    </button>
+                </div>
+
+                <div class="flex-1 p-6 overflow-y-auto bg-gray-50">
+                    <div class="space-y-4">
+                        
+                        <!-- Tarjeta Admin -->
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 font-bold text-lg font-display">AC</div>
+                                <div>
+                                    <p class="font-bold text-gray-900 text-lg">Ana C.</p>
+                                    <div class="flex items-center gap-3 text-sm text-gray-600 mt-1">
+                                        <span class="flex items-center gap-1"><i data-lucide="coffee" class="w-4 h-4 text-orange-400"></i> Café con leche</span>
+                                        <span class="text-gray-300">|</span>
+                                        <span class="flex items-center gap-1"><i data-lucide="sandwich" class="w-4 h-4 text-orange-400"></i> Sándwich de Pollo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider">Por Preparar</span>
+                                <button class="w-10 h-10 rounded-xl bg-orange-100 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                                    <i data-lucide="chef-hat" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Admin -->
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 font-bold text-lg font-display">RT</div>
+                                <div>
+                                    <p class="font-bold text-gray-900 text-lg">Rodrigo T.</p>
+                                    <div class="flex items-center gap-3 text-sm text-gray-600 mt-1">
+                                        <span class="flex items-center gap-1"><i data-lucide="coffee" class="w-4 h-4 text-orange-400"></i> Café Americano</span>
+                                        <span class="text-gray-300">|</span>
+                                        <span class="flex items-center gap-1"><i data-lucide="sandwich" class="w-4 h-4 text-orange-400"></i> Sándwich Mixto</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-green-50 text-green-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Listo</span>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Admin -->
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between opacity-60">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 font-bold text-lg font-display">VH</div>
+                                <div>
+                                    <p class="font-bold text-gray-900 text-lg line-through">Valeria H.</p>
+                                    <div class="flex items-center gap-3 text-sm text-gray-400 mt-1">
+                                        <span>Saltó el pedido de hoy</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="bg-gray-100 text-gray-500 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider">Cancelado</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
