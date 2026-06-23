@@ -89,4 +89,47 @@ La aplicación estará disponible en [http://localhost:5173](http://localhost:51
 El proyecto está configurado para desplegarse automáticamente en **Render** mediante el archivo `render.yaml` en la raíz del repositorio, configurando servicios independientes para el backend web service y el frontend static site.
 
 ---
-*Iteración 1 — MVP Completado*
+
+## 📚 Evolución del Proyecto IngenioSnack
+
+### Iteración 1 — Semanas 1-10 (XP — Extreme Programming)
+✅ Sistema de pedidos web/móvil implementado
+✅ Menú digital con gestión de stock en tiempo real
+✅ Sistema de fidelización "Café de la Lealtad" (10 sándwiches = 1 café gratis)
+✅ Panel de administración con reportes de ventas
+✅ **Resultado:** Filas reducidas en un 40%
+
+---
+
+### Semana 11 — Design Thinking: "Pensando como el Estudiante de la FIS"
+📍 **Metodología:** Design Thinking (5 fases: Empatizar → Definir → Idear → Prototipar → Testear)
+📍 **Problema nuevo:** ¿Suscripción diaria ("Mi Combo Fijo") o Caja Sorpresa de Exámenes?
+📍 **Resultado:** Validación de "Mi Combo Favorito" como solución principal tras entrevistar a 5 estudiantes y testear el prototipo con 2 usuarios reales.
+
+**Entregables:**
+- [`docs/S11_Design_Thinking/MAPA_EMPATIA.png`](docs/S11_Design_Thinking/MAPA_EMPATIA.png)
+- [`docs/S11_Design_Thinking/PROTOTIPO.png`](docs/S11_Design_Thinking/PROTOTIPO.png)
+- [`docs/S11_Design_Thinking/DESIGN_THINKING.md`](docs/S11_Design_Thinking/DESIGN_THINKING.md)
+
+---
+
+### Semana 12 — Lean Startup: "Construir, Medir y Aprender"
+📍 **Metodología:** Lean Startup + MVP + Ciclo CMA (Construir-Medir-Aprender)
+📍 **MVP elegido:** Landing page de suscripción en GitHub Pages (S/ 0 de costo, 1 día de construcción)
+📍 **Resultado:** 31 suscriptores en 2 semanas, 22% de conversión, 94% de retención → **DECISIÓN: PERSEVERAR**
+
+**Entregables:**
+- [`docs/S12_Lean_Startup/LEAN_CANVAS.md`](docs/S12_Lean_Startup/LEAN_CANVAS.md)
+- [`docs/S12_Lean_Startup/MVP_DEFINIDO.md`](docs/S12_Lean_Startup/MVP_DEFINIDO.md)
+- [`docs/S12_Lean_Startup/CICLO_CMA.md`](docs/S12_Lean_Startup/CICLO_CMA.md)
+
+---
+
+### Próximos Pasos — Iteración 2
+- [ ] Módulo de suscripción integrado en la app existente
+- [ ] Notificaciones push diarias de confirmación (7:00 AM)
+- [ ] Panel admin con vista de suscripciones del día
+- [ ] Expansión a Facultad de Ciencias Contables (pendiente inversión S/ 3,000 del Decano)
+
+---
+*Iteración 1 — MVP Completado | Semanas 11-12 — Design Thinking + Lean Startup*
