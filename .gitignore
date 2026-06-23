@@ -6,20 +6,20 @@ node_modules/
 .env
 .env.local
 .env.*.local
-backend/.env
-frontend/.env.local
+src/backend/.env
+src/frontend/.env.local
 
 # SQLite database files
 *.db
 *.db-journal
 
 # Prisma migrations lock (keep migrations folder but not lock)
-backend/prisma/migrations/dev.db
+src/backend/prisma/migrations/dev.db
 
 # Build outputs
 dist/
 build/
-frontend/dist/
+src/frontend/dist/
 .vite/
 
 # Logs
@@ -37,6 +37,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Temporary debug scripts (Git best practices)
+src/backend/test_*.js
 
 # Render
 .render-buildpacks.json

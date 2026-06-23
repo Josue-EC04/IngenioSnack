@@ -90,6 +90,16 @@ Esta arquitectura obsoleta produce “colas infinitas” (alta latencia del serv
 
 ---
 
+### **HU07: Servicio de Delivery y Cálculo Automatizado del Total**
+| **Atributo** | **Detalle** |
+| :--- | :--- |
+| **Rol** | Alumno |
+| **Quiero** | Solicitar el envío de mi pedido por delivery pagando un costo adicional de envío y aplicando mis beneficios como el café gratis. |
+| **Para** | Recibir mi pedido directamente en mi aula o pabellón sin interrumpir mis clases y optimizar mis beneficios de fidelización. |
+| **Criterios de Aceptación** | 1. El alumno puede seleccionar la modalidad de "Delivery" durante la confirmación del pedido.<br>2. El sistema calcula automáticamente el total adicionando un recargo de S/ 5.00 por el servicio de delivery.<br>3. Si la promoción de café de regalo aplica y el pedido incluye un café, el sistema descuenta su precio del total final.<br>4. El sistema registra y muestra el desglose del pedido (subtotal, delivery, descuento y total) correctamente. |
+
+---
+
 ## 🎲 2. Estimación Ágil (Planning Poker)
 
 En la estimación ágil se utilizó la **escala de Fibonacci** para asignar los puntos de historia (indican esfuerzo relativo, complejidad e incertidumbre):
@@ -104,7 +114,8 @@ Esta iteración se enfoca en resolver el cuello de botella principal: digitaliza
 | **HU02** | Gestión de Disponibilidad del Menú | **2** | Esfuerzo menor. Lógica CRUD básica en base de datos para conmutar el campo `activo`/`inactivo` de los productos. |
 | **HU05** | Notificación de Stock Agotado | **5** | Requiere sincronización en tiempo real (Sockets) al momento de agotar inventario y validaciones concurrentes. |
 | **HU06** | Pago Contra Entrega | **2** | Lógica directa. Registro del estado de pago simple sin integración con APIs bancarias o pasarelas de pago. |
-| | **TOTAL ITERACIÓN 1** | **14 Puntos** | |
+| **HU07** | Servicio de Delivery y Cálculo de Total | **3** | Complejidad media. Requiere la lógica de negocio para calcular el costo adicional del delivery y aplicar descuentos. |
+| | **TOTAL ITERACIÓN 1** | **17 Puntos** | |
 
 ---
 
@@ -125,12 +136,13 @@ Esta iteración añade valor agregado sobre la base estable del MVP: incentiva l
 gantt
     title Plan de Lanzamiento - IngenioSnack
     dateFormat  YYYY-MM-DD
-    section Iteración 1 (14 Puntos)
+    section Iteración 1 (17 Puntos)
     HU01 (Pedidos Remotos)      :active, first_task, 2026-06-15, 7d
     HU02 (Gestión Menú)         :active, second_task, 2026-06-16, 2d
     HU05 (Notificación Stock)   :active, third_task, 2026-06-18, 4d
     HU06 (Pago Contra Entrega)  :active, fourth_task, 2026-06-19, 2d
+    HU07 (Cálculo con Delivery) :active, fifth_task, 2026-06-20, 2d
     section Iteración 2 (8 Puntos)
-    HU03 (Fidelización)         :after fourth_task, 5d
-    HU04 (Reporte de Ventas)    :after fourth_task, 3d
+    HU03 (Fidelización)         :after fifth_task, 5d
+    HU04 (Reporte de Ventas)    :after fifth_task, 3d
 ```
