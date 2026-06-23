@@ -1,10 +1,10 @@
-# 🚀 MVP DEFINIDO — "Mi Combo Favorito"
+# MVP DEFINIDO — "Mi Combo Favorito"
 ## Producto Mínimo Viable para Validación
 ### Semana 12 — IS055B | IngenioSnack — UNCP
 
 ---
 
-## ¿Qué es un MVP? (Contexto)
+## ¿Qué es un MVP? 
 
 Un MVP **NO** es un producto incompleto. Es el **experimento más barato y rápido** para aprender si alguien pagaría por nuestra idea antes de invertir tiempo y dinero en desarrollarla completamente.
 
@@ -12,13 +12,13 @@ Un MVP **NO** es un producto incompleto. Es el **experimento más barato y rápi
 
 ---
 
-## 💡 Hipótesis Principal a Validar
+##  Hipótesis Principal a Validar
 
 > **"Creemos que los estudiantes de la FIS-UNCP que tienen un pedido recurrente estarían dispuestos a configurar su combo favorito con anticipación para no hacer fila, y que al menos el 30% de los usuarios actuales activarían esta función en las primeras 2 semanas."**
 
 ---
 
-## 🏆 MVP Elegido: Landing Page de Suscripción + Lista de Espera
+##  MVP Elegido: Landing Page de Suscripción + Lista de Espera
 
 ### Descripción
 Una **página web simple** (sin backend complejo) que:
@@ -79,7 +79,7 @@ Contador público: "17 estudiantes ya tienen su combo reservado"
 > "Tu combo favorito listo antes de que suene el timbre ☕🥪"
 > [Botón naranja: QUIERO MI COMBO]
 
-**Sección 2 — Cómo funciona (3 pasos):**
+**Sección 2 — Cómo funciona:**
 1. 🎯 **Elige tu combo** — Una sola vez, lo que más te gusta
 2. 🍳 **Lo preparamos** — El Sr. Julio lo tiene listo antes del recreo
 3. 🎒 **Solo recógelo** — Sin fila, en 30 segundos
@@ -99,7 +99,7 @@ Contador público: "17 estudiantes ya tienen su combo reservado"
 - [APUNTARME AL COMBO]
 
 **Sección 5 — Contador social:**
-> 🔥 **23 estudiantes** ya tienen su combo reservado
+>  **23 estudiantes** ya tienen su combo reservado
 
 **Sección 6 — FAQ:**
 - ¿Cuándo pago? → Al recoger tu combo, en efectivo
@@ -137,7 +137,7 @@ Contador público: "17 estudiantes ya tienen su combo reservado"
 
 ---
 
-## 📌 Consideraciones Finales
+## 📌Consideraciones Finales
 
 > **¿Por qué NO el módulo completo en la app desde el inicio?**
 > Porque si la hipótesis es incorrecta (los estudiantes no quieren esto), habremos invertido 3 semanas de desarrollo en algo que nadie usará. El MVP permite aprender en **1 día con S/ 0 de costo**.
@@ -147,4 +147,4 @@ Contador público: "17 estudiantes ya tienen su combo reservado"
 ---
 *Semana 12 — IS055B Metodología de Desarrollo de Software*
 *UNCP — Facultad de Ingeniería de Sistemas — Huancayo, Perú*
-*Fecha: 09/06/2026*
+*Fecha: 23/06/2026*
