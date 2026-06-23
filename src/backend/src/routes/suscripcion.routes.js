@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const suscripcionController = require('../controllers/suscripcion.controller');
-const { verificarToken, esEstudiante, esAdmin } = require('../middlewares/auth');
+const authMiddleware = require('../middleware/auth.middleware');
+const adminMiddleware = require('../middleware/admin.middleware');
+
+router.use(authMiddleware);
 
 // Rutas para estudiantes
-router.get('/', verificarToken, esEstudiante, suscripcionController.getSuscripcion);
-router.post('/', verificarToken, esEstudiante, suscripcionController.upsertSuscripcion);
-router.post('/web-push', verificarToken, esEstudiante, suscripcionController.subscribeWebPush);
+router.get('/', suscripcionController.getSuscripcion);
+router.post('/', suscripcionController.upsertSuscripcion);
+router.post('/web-push', suscripcionController.subscribeWebPush);
 
 // Rutas para administradores
-router.get('/admin/dia', verificarToken, esAdmin, suscripcionController.getSuscripcionesDelDia);
+router.get('/admin/dia', adminMiddleware, suscripcionController.getSuscripcionesDelDia);
 
 module.exports = router;
