@@ -2,7 +2,14 @@
 ## Semana 11 — IS055B Metodología de Desarrollo de Software
 **Universidad Nacional del Centro del Perú — Facultad de Ingeniería de Sistemas**
 **Fecha:** 09/06/2026
-**Integrantes:** [Equipo IS055B — Grupo IngenioSnack]
+**Integrantes:** [Equipo IS055B — Grupo IngenioSnack]:
+| # | Apellidos, Nombres | Investigador | Intitución | Semestre |
+|---|--------|-------|---------|------------------------|
+| 1 | Escobar Caysahuana, Jack Rener | Estudiante | UNCP | Quinto |
+| 2 | Espinoza Celis, Josue Alejandro | Estudiante | UNCP | Quinto |
+| 3 | Vera Onsihuay, Didier Mirko | Estudiante | UNCP | Quinto |
+| 4 | Rutti Bendezu, Luis Angel | Estudiante | UNCP | Quinto |
+| 5 | Gamarra Lliuya, Sameer Geanfranco | Estudiante | UNCP | Quinto |
 
 ---
 
@@ -20,11 +27,11 @@ Se realizaron **5 entrevistas cortas** (5 minutos cada una) a estudiantes de la 
 ### Perfil de Entrevistados
 | # | Nombre | Ciclo | Carrera | Frecuencia en cafetería |
 |---|--------|-------|---------|------------------------|
-| 1 | Ana C. | 5to ciclo | Ing. Sistemas | Todos los días |
-| 2 | Carlos M. | 3er ciclo | Ing. Sistemas | 3 veces/semana |
-| 3 | Lucía P. | 7mo ciclo | Ing. Sistemas | Solo en exámenes |
-| 4 | Rodrigo T. | 4to ciclo | Ing. Sistemas | Todos los días |
-| 5 | Valeria H. | 6to ciclo | Ing. Sistemas | 4 veces/semana |
+| 1 | Didier V. | 5to ciclo | Ing. Sistemas | Todos los días |
+| 2 | Sameer G. | 5to ciclo | Ing. Sistemas | 3 veces/semana |
+| 3 | Jack E. | 5to ciclo | Ing. Sistemas | Solo en exámenes |
+| 4 | Jouse E. | 5to ciclo | Ing. Sistemas | Todos los días |
+| 5 | Luis R. | 5to ciclo | Ing. Sistemas | 4 veces/semana |
 
 ### Preguntas de la Entrevista
 1. ¿Qué haces durante el recreo del mediodía?
@@ -34,11 +41,11 @@ Se realizaron **5 entrevistas cortas** (5 minutos cada una) a estudiantes de la 
 5. ¿Pedirías siempre lo mismo si pudieras prepagarlo?
 
 ### Hallazgos Clave de las Entrevistas
-- **Ana:** "Siempre pido lo mismo: café con leche y sándwich de pollo. Odio hacer fila para algo que sé que voy a pedir."
-- **Carlos:** "A veces no bajo porque sé que en 10 minutos no alcanzo. Me quedo con hambre."
-- **Lucía:** "En semana de exámenes me olvido de comer. Ojalá alguien me preparara algo automáticamente."
-- **Rodrigo:** "Ya sé mi pedido de memoria. Sería genial que solo baje a recoger."
-- **Valeria:** "Preferiría tener todo listo antes de bajar. El tiempo del recreo es poco."
+- **Didier:** "Siempre pido lo mismo: café con leche y sándwich de pollo. Odio hacer fila para algo que sé que voy a pedir."
+- **Sameer:** "A veces no bajo porque sé que en 10 minutos no alcanzo. Me quedo con hambre."
+- **Jack:** "En semana de exámenes me olvido de comer. Ojalá alguien me preparara algo automáticamente."
+- **Josue:** "Ya sé mi pedido de memoria. Sería genial que solo baje a recoger."
+- **Luis:** "Preferiría tener todo listo antes de bajar. El tiempo del recreo es poco."
 
 ---
 
@@ -197,7 +204,7 @@ Se presentó el prototipo en papel a **2 estudiantes reales** de la FIS durante 
 
 ### Resultados del Testing
 
-| Criterio | Estudiante 1: Ana C. (5to ciclo) | Estudiante 2: Rodrigo T. (4to ciclo) |
+| Criterio | Estudiante 1: Eduardo Mejia Palacios (5to ciclo) | Estudiante 2: Fernando H. (4to ciclo) |
 |----------|----------------------------------|--------------------------------------|
 | **Qué le GUSTÓ** | "Poder elegir mis días activos. No siempre vengo los viernes." / "La confirmación a las 7am está genial, me recuerda." | "Que pueda cambiar el pedido del día si quiero algo diferente." / "El total diario visible es útil para mi presupuesto." |
 | **Qué NO le gustó** | "¿Y si me quedo sin saldo? ¿Qué pasa?" / "No veo cómo cancelar la suscripción si quiero." | "El botón 'ACTIVAR SUSCRIPCIÓN' suena a contrato. Prefiero 'Guardar mi combo'." / "¿Puedo cambiar mi combo cada semana?" |
@@ -230,4 +237,4 @@ Se presentó el prototipo en papel a **2 estudiantes reales** de la FIS durante 
 ---
 *Semana 11 — IS055B Metodología de Desarrollo de Software*
 *UNCP — Facultad de Ingeniería de Sistemas — Huancayo, Perú*
-*Fecha: 09/06/2026*
+*Fecha: 23/06/2026*
