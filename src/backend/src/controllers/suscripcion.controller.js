@@ -2,11 +2,15 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const webpush = require('web-push');
 
-webpush.setVapidDetails(
-  'mailto:julio@ingeniosnack.pe',
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  webpush.setVapidDetails(
+    'mailto:julio@ingeniosnack.pe',
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+} else {
+  console.warn('[WEB-PUSH] Faltan las variables VAPID_PUBLIC_KEY o VAPID_PRIVATE_KEY. Las notificaciones push no funcionarán.');
+}
 
 // Obtener la suscripción actual del estudiante
 exports.getSuscripcion = async (req, res) => {

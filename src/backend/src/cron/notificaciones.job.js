@@ -3,11 +3,15 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const webpush = require('web-push');
 
-webpush.setVapidDetails(
-  'mailto:julio@ingeniosnack.pe',
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  webpush.setVapidDetails(
+    'mailto:julio@ingeniosnack.pe',
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+} else {
+  console.warn('[WEB-PUSH] Faltan claves VAPID en cron job. Notificaciones deshabilitadas.');
+}
 
 // Función que se ejecuta todos los días a las 7:00 AM
 // "0 7 * * *" en producción (en este caso lo configuramos para ejecutarse)
