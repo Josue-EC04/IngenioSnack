@@ -116,6 +116,7 @@ model Suscripcion {
   snack_id    Int?
   dias_activos String  @default("1,2,3,4,5") // CSV de dias
   activa      Boolean  @default(true)
+  ultima_fecha_preparacion DateTime?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 

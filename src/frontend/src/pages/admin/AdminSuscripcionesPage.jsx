@@ -24,14 +24,33 @@ export default function AdminSuscripcionesPage() {
     }
   };
 
-  const marcarListo = (id) => {
-    setSuscripciones(prev => prev.map(s => s.id === id ? { ...s, estado_hoy: 'listo' } : s));
-    toast.success('Combo marcado como listo');
+  const marcarListo = async (id) => {
+    try {
+      await api.post(`/suscripciones/admin/marcar-listo/${id}`);
+      setSuscripciones(prev => prev.map(s => s.id === id ? { ...s, estado_hoy: 'listo' } : s));
+      toast.success('Combo preparado y pedido generado');
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Error al marcar combo como listo');
+    }
   };
 
-  const marcarTodos = () => {
-    setSuscripciones(prev => prev.map(s => ({ ...s, estado_hoy: 'listo' })));
-    toast.success('Todos los combos listos');
+  const marcarTodos = async () => {
+    const pendientes = suscripciones.filter(s => s.estado_hoy === 'pendiente');
+    if (pendientes.length === 0) return;
+    
+    setLoading(true);
+    let successCount = 0;
+    try {
+      for (const sub of pendientes) {
+        await api.post(`/suscripciones/admin/marcar-listo/${sub.id}`);
+        successCount++;
+      }
+      toast.success(`${successCount} combos preparados y pedidos generados`);
+      fetchSuscripciones(); // Recargar todo
+    } catch (err) {
+      toast.error(`Solo se pudieron preparar ${successCount} combos`);
+      fetchSuscripciones();
+    }
   };
 
   if (loading) return <div className="p-6"><div className="skeleton h-64 rounded-2xl"></div></div>;

@@ -13,5 +13,6 @@ router.post('/web-push', suscripcionController.subscribeWebPush);
 
 // Rutas para administradores
 router.get('/admin/dia', adminMiddleware, suscripcionController.getSuscripcionesDelDia);
+router.post('/admin/marcar-listo/:id', adminMiddleware, suscripcionController.marcarComboComoListo);
 
 module.exports = router;
