@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
-import { Coffee, Sandwich, CheckDouble, ChefHat, Check } from 'lucide-react';
+import { Coffee, Sandwich, CheckCheck, ChefHat, Check } from 'lucide-react';
 
 export default function AdminSuscripcionesPage() {
   const [suscripciones, setSuscripciones] = useState([]);
@@ -53,7 +53,7 @@ export default function AdminSuscripcionesPage() {
             onClick={marcarTodos}
             className="bg-green-500 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 hover:bg-green-600 transition"
           >
-            <CheckDouble className="w-4 h-4" /> Marcar todos listos
+            <CheckCheck className="w-4 h-4" /> Marcar todos listos
           </button>
         )}
       </div>
